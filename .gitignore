@@ -31,3 +31,7 @@ jsconfig.json
 
 # Virtual Machine
 vm-shared/
+
+# Project specific
+P1A/team.txt
+P1A/p1a_test
