@@ -30,5 +30,8 @@ Here are some(but not limit to) reasonable test cases:
 
 
 <?php
+  $expr = $_GET[expr];
   echo "<h2>Result</h2>";
+  $error = eval("\$res=$expr;");
+  echo $expr . " = " . $res;
 ?>
