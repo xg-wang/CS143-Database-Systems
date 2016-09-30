@@ -28,10 +28,36 @@ Here are some(but not limit to) reasonable test cases:
   <li> Some typos inside operation (e.g. alphabetic letter): Invalid input expression 2d4+1 </li>
 </ol>
 
+<?php
+// Utilities
+  function is_valid($expr) {
+    $p_invalid_chars  = '/[^0-9\.()-\+\*\/]/';
+    $p_devide_by_zero = '/\/0/';
+
+    preg_replace('/\s/', '', $expr);
+    if (preg_match($p_invalid_chars, $expr)) {
+      return "contains invalid chars";
+    } elseif (preg_match($p_devide_by_zero, $expr)) {
+      return "devide by zero";
+    }
+    return TRUE;
+  }
+?>
 
 <?php
-  $expr = $_GET[expr];
   echo "<h2>Result</h2>";
-  $error = eval("\$res=$expr;");
-  echo $expr . " = " . $res;
+  $expr = $_GET["expr"];
+  $error_msg = is_valid($expr);
+  if ($error_msg !== TRUE) {
+    echo "Invalid input: " . $expr . ", " . $error_msg . "."; 
+    echo "<br>Please try again :-)";
+  } else {
+    $error = eval("\$res=$expr;");
+    if ($error === FALSE) {
+      echo "Invalid input: " . $expr . ".";
+      echo "<br>Please try again :-)";
+    } else {
+      echo $expr . " = " . $res;
+    }
+  }
 ?>
