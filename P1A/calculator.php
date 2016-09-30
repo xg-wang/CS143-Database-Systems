@@ -31,7 +31,7 @@ Here are some(but not limit to) reasonable test cases:
 <?php
 // Utilities
   function is_valid($expr) {
-    $p_invalid_chars  = '/[^0-9\.()-\+\*\/]/';
+    $p_invalid_chars  = '/[^0-9\.()\-\+\*\/]/';
     $p_devide_by_zero = '/\/0/';
 
     preg_replace('/\s/', '', $expr);
