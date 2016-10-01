@@ -31,16 +31,22 @@ Here are some(but not limit to) reasonable test cases:
 <?php
 // Utilities
   function is_valid($expr) {
-    $p_invalid_chars  = '/[^0-9\.()\-\+\*\/]/';
+    $p_invalid_chars  = '/[^\d\.()\-\+\*\/]/';
     $p_devide_by_zero = '/\/0/';
+    $p_redundant_positive_sign = '/[\+\-\*\/]\+/';
 
-    preg_replace('/\s/', '', $expr);
+    $error_arr = array();
+    $expr = preg_replace('/\s+/', '', $expr);
     if (preg_match($p_invalid_chars, $expr)) {
-      return "contains invalid chars";
-    } elseif (preg_match($p_devide_by_zero, $expr)) {
-      return "devide by zero";
+      array_push($error_arr, "contains invalid chars");
+    } 
+    if (preg_match($p_devide_by_zero, $expr)) {
+      array_push($error_arr, "devide by zero");
+    } 
+    if (preg_match($p_redundant_positive_sign, $expr)) {
+      array_push($error_arr, "redundant positive sign");
     }
-    return TRUE;
+    return empty($error_arr) ? TRUE : implode(", ", $error_arr);
   }
 ?>
 
@@ -49,9 +55,10 @@ Here are some(but not limit to) reasonable test cases:
   $expr = $_GET["expr"];
   $error_msg = is_valid($expr);
   if ($error_msg !== TRUE) {
-    echo "Invalid input: " . $expr . ", " . $error_msg . "."; 
+    echo "Invalid input: " . $expr . ".<br>error: " . $error_msg . "."; 
     echo "<br>Please try again :-)";
   } else {
+    $expr = preg_replace('/(\d\-)(\-\d)/', '$1 $2', $expr);
     $error = eval("\$res=$expr;");
     if ($error === FALSE) {
       echo "Invalid input: " . $expr . ".";
