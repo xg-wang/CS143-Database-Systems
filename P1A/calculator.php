@@ -34,7 +34,7 @@ Here are some(but not limit to) reasonable test cases:
     $p_invalid_chars  = '/[^\d\.()\-\+\*\/]/';
     $p_devide_by_zero = '/\/0/';
     $p_redundant_positive_sign = '/[\+\-\*\/]\+/';
-    $p_octal_nums = '/[0]\d/';
+    $p_octal_nums = '/[^\d\.]0\d|^0\d/';
 
     $error_arr = array();
     $expr = preg_replace('/\s+/', '', $expr);
@@ -48,7 +48,7 @@ Here are some(but not limit to) reasonable test cases:
       array_push($error_arr, "redundant positive sign");
     }
     if (preg_match($p_octal_nums, $expr)){
-      array_push($error_arr, "Invalid octal representation");
+      array_push($error_arr, "invalid octal representation");
     }
     return empty($error_arr) ? TRUE : implode(", ", $error_arr);
   }
