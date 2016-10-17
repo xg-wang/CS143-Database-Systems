@@ -33,7 +33,7 @@ jsconfig.json
 vm-shared/
 
 # Project specific
-P1A/team.txt
+team.txt
 P1A/p1a_test
 *.zip
 
