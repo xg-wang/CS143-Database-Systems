@@ -19,7 +19,7 @@
 		<small>(Ver 0.1 Oct/16/2016 by Yiming Wang & Xingan Wang)</small>
 		<p>Please do not run a complex query here. You may kill the server.</p>
 		<p>Type an SQL query in the following box:</p>
-		Example: <tt>SELECT * FROM Actor WHERE id=10;</tt><br/>
+		Example: <tt>SELECT * FROM Actor WHERE id < 20;</tt><br/>
 		<p>
 			<form action="query.php" method="GET">
 			<textarea name="query" cols="60" rows="8"><?php
@@ -35,7 +35,7 @@
 	<?php
 		$result = $db->query($query);
 		if (!$result) {
-			die("Database query failed. " . $db->error($connection));
+			die("Database query failed. " . $db->error . "<br/>");
 		}
 	?>
 		<h3>Results from MySQL:</h3>
