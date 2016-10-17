@@ -15,12 +15,16 @@
 		<title>Project 1 Part B</title>
 	</head>
 	<body>
+		<h1>Project 1 Part B</h1>
+		<small>(Ver 0.1 Oct/16/2016 by Yiming Wang & Xingan Wang)</small>
 		<p>Please do not run a complex query here. You may kill the server.</p>
 		<p>Type an SQL query in the following box:</p>
 		Example: <tt>SELECT * FROM Actor WHERE id=10;</tt><br/>
 		<p>
 			<form action="query.php" method="GET">
-			<textarea name="query" cols="60" rows="8">SELECT * FROM Actor WHERE id < 20</textarea><br/>
+			<textarea name="query" cols="60" rows="8"><?php
+					$query = $_GET["query"];
+					echo $query ? $query : "SELECT * FROM Actor WHERE id < 20";?></textarea><br/>
 			<input type="submit" value="Submit"/>
 			</form>
 		</p>
@@ -29,7 +33,6 @@
 		</p>
 
 	<?php
-		$query  = $_GET["query"];
 		$result = $db->query($query);
 		if (!$result) {
 			die("Database query failed. " . $db->error($connection));
