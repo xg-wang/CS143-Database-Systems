@@ -15,3 +15,27 @@ INSERT INTO Actor VALUES(68626,"Wang","Xingan","God",19950101,NULL)
 
 INSERT INTO Review VALUES("xgwang","2008-01-19 03:14:07",1639,6,"Awesome Movie");
 -- CHECK (rating >= 0 AND rating <= 5) but here it is 6
+
+INSERT INTO MovieGenre VALUES (4800, 'Thrill');
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'MovieGenre', CONSTRAINT 'MovieGenre_ibfk_1' FOREIGN KEY ('mid') REFERENCES 'Movie' ('id'))
+-- Reference constraint error: Movie id(4800) does not exist in the Movie table
+
+INSERT INTO MovieDirector VALUES (4800, 68626);
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'MovieDirector', CONSTRAINT 'MovieDirector_ibfk_1' FOREIGN KEY ('mid') REFERENCES 'Movie' ('id'))
+-- Reference constraint error: Movie id(4800) does not exist in the Movie table
+
+INSERT INTO MovieDirector VALUES (4734, 69000);
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'MovieDirector', CONSTRAINT 'MovieDirector_ibfk_2' FOREIGN KEY ('did') REFERENCES 'Director' ('id'))
+-- Reference constraint error: Director id(69000) does not exist in the Director table
+
+INSERT INTO MovieActor VALUES (4800, 66000, 'Judge');
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'MovieActor', CONSTRAINT 'MovieActor_ibfk_1' FOREIGN KEY ('mid') REFERENCES 'Movie' ('id'))
+-- Reference constraint error: Movie id(4800) does not exist in the Movie table
+
+INSERT INTO MovieActor VALUES (4734, 69000, 'Judge');
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'MovieActor', CONSTRAINT 'MovieActor_ibfk_2' FOREIGN KEY ('aid') REFERENCES 'Actor' ('id'))
+-- Reference constraint error: Actor id(69000) does not exist in the Actor table
+
+INSERT INTO Review VALUES ('David', '10-16-2016 23:17:16', 4800, 5, 'Very good!');
+-- ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails ('CS143'.'Review', CONSTRAINT 'MovieActor_ibfk_1' FOREIGN KEY ('mid') REFERENCES 'Movie' ('id'))
+-- Reference constraint error: Movie id(4800) does not exist in the Movie table
