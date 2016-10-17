@@ -64,6 +64,6 @@
 </html>
 
 <?php
-	mysql_free_result($rs);
-  mysqli_close($connection);
+	$result->free();
+  $db->close();
 ?>
