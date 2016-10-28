@@ -1,3 +1,35 @@
-<p>
-  add-am-relation works!
-</p>
+<md-card class="card-basic half-width">
+  <md-toolbar color="primary">Add Movie-Actor Relation</md-toolbar>
+  <md-card-content>
+    <form>
+      <table class="compact-table-row">
+        <tr>
+          <td>
+            <md-input placeholder="Movie"
+                      class="full-width"
+                      [md-menu-trigger-for]="movieMenu">
+            </md-input>
+            <md-menu x-position="after" #movieMenu="mdMenu">
+              <!--TODO: *ngFor-->
+            </md-menu>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <md-input placeholder="Actor"
+                      class="full-width"
+                      [md-menu-trigger-for]="actorMenu">
+            </md-input>
+            <md-menu x-position="after" #actorMenu="mdMenu">
+              <!--TODO: *ngFor-->
+            </md-menu>
+          </td>
+        </tr>
+        <tr>
+          <md-input placeholder="Role" class="full-width"></md-input>
+        </tr>
+      </table>
+      <button md-mini-fab type="submit"><md-icon>check circle</md-icon></button>
+    </form>
+  </md-card-content>
+</md-card>
