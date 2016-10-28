@@ -1,0 +1,11 @@
+.app-title {
+  padding: 0 20px;
+}
+
+.app-toolbar-menu {
+  padding: 0 0 0 14px;
+}
+
+.app-toolbar-filler {
+  flex: 1 1 auto;
+}

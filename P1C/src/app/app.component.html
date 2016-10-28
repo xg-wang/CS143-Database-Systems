@@ -1,3 +1,33 @@
-<h1>
-  {{title}}
-</h1>
+<div>
+  <md-toolbar color="primary">
+    <span>
+      <md-icon>movie</md-icon>
+    </span>
+    <span class="app-title">BuIMBd</span>
+    <button md-button [md-menu-trigger-for]="contentMenu">
+      <span class="app-toolbar-menu">Add Content</span>
+    </button>
+    <button md-button [md-menu-trigger-for]="relationMenu">
+      <span class="app-toolbar-menu">Add Relation</span>
+    </button>
+    <span class="app-toolbar-filler"></span>
+    <a md-mini-fab routerLink="/search">
+      <md-icon>search</md-icon>
+    </a>
+    <a md-button routerLink='/about'>About</a>
+  </md-toolbar>
+
+  <md-menu x-position="before" #contentMenu="mdMenu">
+    <a md-menu-item routerLink='add-people'>People</a>
+    <a md-menu-item routerLink='add-movie'>Movie</a>
+  </md-menu>
+  <md-menu x-position="before" #relationMenu="mdMenu">
+    <a md-menu-item routerLink='add-am-relation'>Movie/Actor</a>
+    <a md-menu-item routerLink='add-dm-relation'>Movie/Director</a>
+  </md-menu>
+</div>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+
