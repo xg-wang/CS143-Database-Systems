@@ -1,3 +1,17 @@
-<p>
-  search works!
-</p>
+<md-card class="search-card half-width">
+  <md-toolbar color="primary">
+    <span class="text-center">Searching Page</span>
+  </md-toolbar>
+  <md-card-content>
+    <form>
+      <md-input
+        placeholder="Search Actors or Movies..."
+        class="full-width"
+        [(ngModel)]="searchStr"
+        name="search"
+        (keyup)="search()"
+      >
+      </md-input>
+    </form>
+  </md-card-content>
+</md-card>

@@ -1,0 +1,10 @@
+.search-card {
+  padding: 0;
+}
+.search-card md-card-content {
+  padding: 14px;
+  text-align: center;
+}
+.text-center {
+  text-align: center;
+}

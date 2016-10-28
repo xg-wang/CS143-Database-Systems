@@ -10,3 +10,10 @@ md-card {
   margin: 2em auto;
   text-align: center;
 }
+
+.half-width {
+  width: 50%;
+}
+.full-width {
+  width: 100%;
+}
