@@ -1,6 +1,6 @@
-<md-card class="search-card half-width">
+<md-card class="card-basic half-width">
   <md-toolbar color="primary">
-    <span class="text-center">Searching Page</span>
+    <span>Searching Page</span>
   </md-toolbar>
   <md-card-content>
     <form>
@@ -12,6 +12,14 @@
         (keyup)="search()"
       >
       </md-input>
+      <section class="full-width">
+        <md-checkbox name="searchActor" [(ngModel)]="searchActor">
+          search actor
+        </md-checkbox>
+        <md-checkbox name="searchMovie" [(ngModel)]="searchMovie">
+          search movie
+        </md-checkbox>
+      </section>
     </form>
   </md-card-content>
 </md-card>

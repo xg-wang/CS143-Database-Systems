@@ -11,9 +11,31 @@ md-card {
   text-align: center;
 }
 
+.card-basic {
+  padding: 0;
+}
+.card-basic md-card-content {
+  padding: 14px;
+  text-align: center;
+}
+
 .half-width {
   width: 50%;
 }
 .full-width {
   width: 100%;
 }
+
+.compact-table-row {
+  width: 100%;
+}
+md-radio-group {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+md-radio-button {
+  width: 4em;
+  padding-right: 1em;
+}
+
