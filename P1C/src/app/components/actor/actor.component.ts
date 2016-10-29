@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { BruimdbServiceService } from '../../services/bruimdb-service.service';
 
 @Component({
   selector: 'app-actor',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ActorComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _bruimdbService: BruimdbServiceService,
+    private _route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+    this._route.params
+      .map(params => params['id'])
+      .subscribe(id => {
+      });
   }
 
 }

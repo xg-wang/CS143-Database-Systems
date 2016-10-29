@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {BruimdbServiceService} from '../../services/bruimdb-service.service';
-import {Actor} from '../../models/actor';
-import {Movie} from '../../models/movie';
+import { BruimdbServiceService } from '../../services/bruimdb-service.service';
+import { Actor } from '../../models/actor';
+import { Movie } from '../../models/movie';
 
 @Component({
   selector: 'app-search',
