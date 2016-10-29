@@ -14,6 +14,7 @@ import { SearchComponent } from './components/search/search.component';
 import { AboutComponent } from './components/about/about.component';
 import { ActorComponent } from './components/actor/actor.component';
 import { MovieComponent } from './components/movie/movie.component';
+import { BruimdbServiceService } from './services/bruimdb-service.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { MovieComponent } from './components/movie/movie.component';
     ]),
     HttpModule
   ],
-  providers: [],
+  providers: [BruimdbServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
