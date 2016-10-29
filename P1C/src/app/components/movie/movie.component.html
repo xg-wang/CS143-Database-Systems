@@ -1,3 +1,49 @@
-<p>
-  movie works!
-</p>
+<md-card class="card-basic half-width">
+  <md-toolbar color="primary">Movie Information</md-toolbar>
+  <md-card-content>
+    <table class="compact-table-row">
+      <tr>
+        <td><i>Title: </i>{{actorInfo.first}} {{actorInfo.last}}</td>
+        <td><i>Producer: </i>{{actorInfo.sex}}</td>
+      </tr>
+      <tr>
+        <td><i>MPAA Rating: </i>{{actorInfo.dob}}</td>
+        <td><i>Director: </i>{{actorInfo.dod}}</td>
+      </tr>
+      <tr>
+        <td><i>Genre:</i></td>
+        <td *ngFor="let genre of genres"> {{genre}} </td>
+      </tr>
+    </table>
+  </md-card-content>
+</md-card>
+
+<md-card class="card-basic half-width">
+  <md-toolbar color="primary">Actors in this movie</md-toolbar>
+  <md-card-content>
+    <table class="compact-table-row">
+      <tr>
+        <th>Name</th>
+        <th>Role</th>
+      </tr>
+      <tr *ngFor="let relation of amRelations">
+        <td>{{relation.name}}</td>
+        <td>{{relation.role}}</td>
+      </tr>
+    </table>
+  </md-card-content>
+</md-card>
+
+<md-list class="card-basic half-width">
+  <md-toolbar color="primary">Reviews for this movie</md-toolbar>
+  <md-list-item *ngFor="let review of reviews">
+    <h3 md-line>
+      <span>{{review.name}}</span>
+      <span>{{review.time}}</span>
+    </h3>
+    <p>
+      <span><strong>Rating: {{review.rating}}  </strong></span>
+      <span>{{review.comment}}</span>
+    </p>
+  </md-list-item>
+</md-list>

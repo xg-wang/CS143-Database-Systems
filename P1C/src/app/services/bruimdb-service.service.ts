@@ -26,4 +26,15 @@ export class BruimdbServiceService {
       .map(res => res.json());
   }
 
+  searchActor(id: number) {
+    let searchUrl = apiUrl + 'actors/' + id;
+    return this._http.get(searchUrl)
+      .map(res => res.json());
+  }
+  searchMovie(id: number) {
+    let searchUrl = apiUrl + 'movies/' + id;
+    return this._http.get(searchUrl)
+      .map(res => res.json());
+  }
+
 }
