@@ -1,0 +1,128 @@
+GET:/search.php?entity=?&reference=?
+	entity   : actors or movies.
+	Reference: id or name.
+
+	searchActorByID{
+		'last': 
+		'first':
+		'sex':
+		'dob':
+		'dod':
+		'role':
+		'title':
+	}
+
+	searchActorByName{
+		'last': 
+		'first':
+		'dob':
+	}
+
+	searchMovieByID{
+		'movieinfo':{
+			'title': 
+			'year':
+			'rating':
+			'company':
+		}
+		'director':{
+			'last':
+			'first':
+		}
+		'genre':{
+			'genre':
+		}
+		'actors':{
+			{'first':
+			'last':
+			'role':},
+
+			{'first':
+			'last':
+			'role':}
+		}	
+		'ave_rating':{
+			'ave_rating':
+		}
+		'comments'{
+			{'time':
+			'name':
+			'rating':
+			'comment':},
+
+			{'time':
+			'name':
+			'rating':
+			'comment':},
+		}
+	}
+
+	searchMovieByName{
+		'title': 
+		'year':
+	}
+
+
+
+
+
+
+POST:/addRelation.php?relation=?&entityA=?&entityB=?&role=?
+	relation : actorMovie or directorMovie.
+	entityA	 : movie.
+	entityB	 : actor or director.
+	role	 : role
+
+	{
+		'relation': 
+		'data'{
+			'entityA':
+			'entityB':
+			'role':
+		}
+	}
+
+/addEntity.php?entity=?&data=?
+	entity   : actor or director or movie or review.
+	data	 : 
+		actor: {
+			'entity': "actor",
+			'data'{
+				'last':
+				'first':
+				'sex':
+				'dob':
+				'dod':
+			}
+		}
+
+		director:{
+			'entity': "director",
+			'data'{
+				'last':
+				'first':
+				'dob':
+				'dod':
+			}
+		}
+
+		movie: {
+			'entity': "movie",
+			'data'{
+				'title':
+				'year':
+				'rating':
+				'company':
+				'genre':
+			}
+		}
+
+		review: {
+			'entity': "review",
+			'data'{
+				'title':
+				'name':
+				'rating':
+				'comment':
+			}
+		}
