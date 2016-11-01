@@ -241,25 +241,35 @@ class DBOperation{
 		if($aid == ""){
 			$error = "invalid actor ID";
 			return $error;
-		}else if ($stmt = $this->db->prepare("SELECT a.last, a.first, a.sex, a.dob, a.dod, ma.role, m.title FROM 
-			Actor a, MovieActor ma, Movie m WHERE a.id = ma.aid AND ma.mid = m.id AND a.id = ?") ){
-            
+		}else if ($stmt = $this->db->prepare("SELECT last, first, sex, dob, dod FROM Actor WHERE id = ?")){
             $stmt->bind_param('i', $aid);
             $stmt->execute();
-            $stmt->bind_result($last, $first, $sex, $dob, $dod, $role, $title);
-            $actors = array();
+            $stmt->bind_result($last, $first, $sex, $dob, $dod);
+            $stmt->fetch();
+            $actorInfo = array(
+                "last" => $last,
+                "first" => $first,
+                "sex" => $sex,
+                "dob" => $dob,
+                'dod' => $dod,
+            );
+            $stmt->close();
+
+            $stmt = $this->db->prepare("SELECT ma.role, m.title FROM MovieActor ma, Movie m WHERE ma.mid = m.id AND ma.aid = ?");
+            $stmt->bind_param('i', $aid);
+            $stmt->execute();
+            $stmt->bind_result($role, $title);
+            $amRelations = array();
             while ($row = $stmt->fetch()) {
                 $var = array(
-                    "last" => $last,
-                    "first" => $first,
-                    "sex" => $sex,
-                    "dob" => $dob,
-                    "dod" => $dod,
                     "role" => $role,
                     "title" => $title,
                 );
-                array_push($actors, $var);
+                array_push($amRelations, $var);
             }
+
+            $actors['actorInfo'] = $actorInfo;
+            $actors['amRelations'] = $amRelations;
             return $actors;
 
         } else {
@@ -380,9 +390,9 @@ class DBOperation{
 			$movie['movieInfo'] = $movieinfo;
 			$movie['director'] = $director;
 			$movie['genres'] = $genre;
-			$movie['amRelation'] = $amRelation;
+			$movie['amRelations'] = $amRelation;
 			$movie['aveRating'] = $ave_rating;
-			$movie['comments'] = $comments;
+			$movie['reviews'] = $comments;
 
 			return $movie;
             #return array_merge($movie, $director, $genre, $actors, $ave_rating, $comments);
