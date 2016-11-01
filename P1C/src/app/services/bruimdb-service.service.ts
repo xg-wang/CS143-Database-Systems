@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-const apiUrl = 'http://localhost/search.php?';
+const apiUrl = 'http://localhost:1438/~cs143/server/';
+const searchApiUrl = apiUrl + 'search.php?';
+const addRelationUrl = apiUrl + 'addRelation.php?';
+const addEntityUrl = apiUrl + 'addEntity.php?';
+
 @Injectable()
 export class BruimdbServiceService {
   constructor(private _http: Http) { }
@@ -14,25 +18,31 @@ export class BruimdbServiceService {
     };
   }
   searchActorByName(str: string) {
-    let searchUrl = apiUrl + 'entity=actors&name=' + str;
+    let searchUrl = searchApiUrl + 'entity=actors&name=' + str;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
   searchMovieByName(str: string) {
-    let searchUrl = apiUrl + 'entity=movies&name=' + str;
+    let searchUrl = searchApiUrl + 'entity=movies&name=' + str;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
 
   searchActorById(id: number) {
-    let searchUrl = apiUrl + 'entity=actors&id=' + id;
+    let searchUrl = searchApiUrl + 'entity=actors&id=' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
   searchMovieById(id: number) {
-    let searchUrl = apiUrl + 'entity=movies&id=' + id;
+    let searchUrl = searchApiUrl + 'entity=movies&id=' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
 
+  addEntity(data: any, entity: string) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    let url = addEntityUrl + 'entity=' + entity;
+    return this._http.post(url, data, options);
+  }
 }

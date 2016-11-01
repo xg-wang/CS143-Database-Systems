@@ -1,14 +1,14 @@
-<md-card class="card-basic half-width">
+<md-card class="card-basic half-width" *ngIf="movieInfo">
   <md-toolbar color="primary">Movie Information</md-toolbar>
   <md-card-content>
     <table class="compact-table-row">
       <tr>
-        <td><i>Title: </i>{{actorInfo.first}} {{actorInfo.last}}</td>
-        <td><i>Producer: </i>{{actorInfo.sex}}</td>
+        <td><i>Title: </i>{{movieInfo.title}}</td>
+        <td><i>Producer: </i>{{movieInfo.company}}</td>
       </tr>
       <tr>
-        <td><i>MPAA Rating: </i>{{actorInfo.dob}}</td>
-        <td><i>Director: </i>{{actorInfo.dod}}</td>
+        <td><i>MPAA Rating: </i>{{movieInfo.rating}}</td>
+        <td><i>Director: </i>{{director.first}} {{director.last}}</td>
       </tr>
       <tr>
         <td><i>Genre:</i></td>
@@ -18,7 +18,7 @@
   </md-card-content>
 </md-card>
 
-<md-card class="card-basic half-width">
+<md-card class="card-basic half-width" *ngIf="amRelations">
   <md-toolbar color="primary">Actors in this movie</md-toolbar>
   <md-card-content>
     <table class="compact-table-row">
@@ -27,14 +27,14 @@
         <th>Role</th>
       </tr>
       <tr *ngFor="let relation of amRelations">
-        <td>{{relation.name}}</td>
+        <td><a routerLink="/actor/{{relation.aid}}">{{relation.first}} {{relation.last}}</a></td>
         <td>{{relation.role}}</td>
       </tr>
     </table>
   </md-card-content>
 </md-card>
 
-<md-list class="card-basic half-width">
+<md-list class="card-basic half-width" *ngIf="reviews">
   <md-toolbar color="primary">Rating: {{aveRating}}</md-toolbar>
   <md-toolbar color="primary">Reviews for this movie</md-toolbar>
   <md-list-item *ngFor="let review of reviews">

@@ -1,4 +1,4 @@
-<md-card class="card-basic half-width">
+<md-card class="card-basic half-width" *ngIf="actorInfo">
   <md-toolbar color="primary">Actor Information</md-toolbar>
   <md-card-content>
     <table class="compact-table-row">
@@ -14,7 +14,7 @@
   </md-card-content>
 </md-card>
 
-<md-card class="card-basic half-width">
+<md-card class="card-basic half-width" *ngIf="amRelations">
   <md-toolbar color="primary">Actor/Movie Relations</md-toolbar>
   <md-card-content>
     <table class="compact-table-row">
@@ -24,7 +24,7 @@
       </tr>
       <tr *ngFor="let relation of amRelations">
         <td>{{relation.role}}</td>
-        <td>{{relation.movieTitle}}</td>
+        <td><a routerLink="/movie/{{relation.mid}}">{{relation.title}}</a></td>
       </tr>
     </table>
   </md-card-content>

@@ -22,10 +22,10 @@ export class SearchComponent implements OnInit {
                                 this.searchActorOption,
                                 this.searchMovieOption);
     searchRes.actors.subscribe(res => {
-      this.actorRes = res.actors;
+      this.actorRes = res;
     });
     searchRes.movies.subscribe(res => {
-      this.movieRes = res.movies;
+      this.movieRes = res;
     });
   }
 

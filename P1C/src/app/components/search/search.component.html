@@ -9,9 +9,12 @@
         class="full-width"
         [(ngModel)]="searchStr"
         name="search"
-        (keyup)="search()"
       >
       </md-input>
+      <button md-raised-button color="primary"
+              (click)="search()">
+        Search!
+      </button>
       <section class="full-width">
         <md-checkbox name="searchActor" [(ngModel)]="searchActorOption">
           search actor
@@ -26,28 +29,16 @@
 
 <md-list class="half-width" *ngIf="searchActorOption">
   <h3 md-subheader>Search Actors</h3>
-  <md-list-item class="full-width">
-    <p md-line>
-      <a routerLink="/actor/25722" class="half-width">Tom Hanks</a>
-      <span class="half-width">1997-01-01</span>
-    </p>
-  </md-list-item>
   <md-list-item *ngFor="let actor of actorRes" class="full-width">
     <p md-line>
       <a routerLink="/actor/{{actor.id}}" class="half-width"> {{actor.first}} {{actor.last}}</a>
-      <span class="half-width"> {{actor.dob.getDate()}} </span>
+      <span class="half-width"> {{actor.dob}} </span>
     </p>
   </md-list-item>
 </md-list>
 
 <md-list *ngIf="searchMovieOption">
   <h3 md-subheader>Search Movies</h3>
-  <md-list-item class="full-width">
-    <p md-line>
-      <a routerLink="/movie/4768" class="half-width">Tom Hanks</a>
-      <span class="half-width">1997</span>
-    </p>
-  </md-list-item>
   <md-list-item *ngFor="let movie of movieRes" class="full-width">
     <p md-line>
       <a routerLink="/movie/{{movie.id}}" class="half-width"> {{movie.title}} </a>

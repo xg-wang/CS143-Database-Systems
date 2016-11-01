@@ -1,5 +1,7 @@
 export class ActorMovieRelation {
-  actorName: string;
-  movieTitle: string;
+  name: string;
+  title: string;
   role: string;
+  aid: number;
+  mid: number;
 }

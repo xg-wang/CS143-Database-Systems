@@ -3,6 +3,6 @@ export class Actor {
   last: string;
   first: string;
   sex: string;
-  dob: Date;
-  dod: Date;
+  dob: number;
+  dod: number;
 }
