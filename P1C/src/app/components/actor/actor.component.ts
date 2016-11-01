@@ -22,7 +22,7 @@ export class ActorComponent implements OnInit {
     this._route.params
       .map(params => params['id'])
       .subscribe(id => {
-        this._bruimdbService.searchActor(id)
+        this._bruimdbService.searchActorByName(id)
           .subscribe(res => {
             this.actorInfo = res.actorInfo;
             this.amRelations = res.amRelations;

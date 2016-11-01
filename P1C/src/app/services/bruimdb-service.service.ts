@@ -2,35 +2,35 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-const apiUrl = 'http://localhost:1438/~cs143/server/api/v1/';
+const apiUrl = 'http://localhost/search.php?';
 @Injectable()
 export class BruimdbServiceService {
   constructor(private _http: Http) { }
 
   search(str: string, actorOption = true, movieOption = true) {
     return {
-      actors: actorOption ? this.searchActor(str) : null,
-      movies: movieOption ? this.searchMovie(str) : null
+      actors: actorOption ? this.searchActorByName(str) : null,
+      movies: movieOption ? this.searchMovieByName(str) : null
     };
   }
-  searchActor(str: string) {
-    let searchUrl = apiUrl + 'actors/search?name=' + str;
+  searchActorByName(str: string) {
+    let searchUrl = apiUrl + 'entity=actors&name=' + str;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
-  searchMovie(str: string) {
-    let searchUrl = apiUrl + 'movies/search?name=' + str;
+  searchMovieByName(str: string) {
+    let searchUrl = apiUrl + 'entity=movies&name=' + str;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
 
   searchActorById(id: number) {
-    let searchUrl = apiUrl + 'actors/' + id;
+    let searchUrl = apiUrl + 'entity=actors&id=' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
   searchMovieById(id: number) {
-    let searchUrl = apiUrl + 'movies/' + id;
+    let searchUrl = apiUrl + 'entity=movies&id=' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }

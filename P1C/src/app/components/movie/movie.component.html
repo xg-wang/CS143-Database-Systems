@@ -35,6 +35,7 @@
 </md-card>
 
 <md-list class="card-basic half-width">
+  <md-toolbar color="primary">Rating: {{aveRating}}</md-toolbar>
   <md-toolbar color="primary">Reviews for this movie</md-toolbar>
   <md-list-item *ngFor="let review of reviews">
     <h3 md-line>

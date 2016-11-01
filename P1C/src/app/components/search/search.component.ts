@@ -18,7 +18,6 @@ export class SearchComponent implements OnInit {
   constructor(private _bruimdbService: BruimdbServiceService) { }
 
   search() {
-    console.log('searching ' + this.searchStr + '!');
     let searchRes = this._bruimdbService.search(this.searchStr,
                                 this.searchActorOption,
                                 this.searchMovieOption);

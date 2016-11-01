@@ -14,7 +14,8 @@ export class MovieComponent implements OnInit {
   movieInfo: Movie;
   amRelations: ActorMovieRelation[];
   genres: string[];
-  reviews: Review;
+  reviews: Review[];
+  aveRating: number;
 
   constructor(private _bruimdbService: BruimdbServiceService,
               private _route: ActivatedRoute) { }
@@ -23,12 +24,13 @@ export class MovieComponent implements OnInit {
     this._route.params
       .map(params => params['id'])
       .subscribe(id => {
-        this._bruimdbService.searchMovie(id)
+        this._bruimdbService.searchMovieByName(id)
           .subscribe(res => {
             this.movieInfo = res.movieInfo;
             this.amRelations = res.amRelations;
             this.genres = res.genres;
             this.reviews = res.reviews;
+            this.aveRating = res.aveRating;
           });
       });
   }
