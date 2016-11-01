@@ -10,6 +10,10 @@ class DBOperation{
 		$dbpass = "Wangym0124";
 		$dbname = "test";
 
+		/*$dbhost = "localhost";
+		$dbuser = "cs143";
+		$dbpass = "";
+		$dbname = "CS143";*/
 		$my_db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 		if($my_db->connect_errno > 0){
     		die('Unable to connect to database [' . $my_db->connect_error . ']');
@@ -366,9 +370,6 @@ class DBOperation{
             $stmt->execute();
             $stmt->bind_result($ave_rating);
             $stmt->fetch();
-            $ave_rating = array(
-                "ave_rating" => $ave_rating,
-            );
             $stmt->close();
 
             $stmt = $this->db->prepare("SELECT time, name, rating, comment FROM Review WHERE mid = ? ORDER BY time DESC");
@@ -387,7 +388,7 @@ class DBOperation{
             };
 			$stmt->close();
 			
-			$movie['movieInfo'] = $movieinfo;
+			$movie['movieInfo'] = $movieInfo;
 			$movie['director'] = $director;
 			$movie['genres'] = $genre;
 			$movie['amRelations'] = $amRelation;
