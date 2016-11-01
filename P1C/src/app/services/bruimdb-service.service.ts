@@ -3,10 +3,8 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
 const apiUrl = 'http://localhost:1438/~cs143/server/api/v1/';
-
 @Injectable()
 export class BruimdbServiceService {
-
   constructor(private _http: Http) { }
 
   search(str: string, actorOption = true, movieOption = true) {
@@ -26,12 +24,12 @@ export class BruimdbServiceService {
       .map(res => res.json());
   }
 
-  searchActor(id: number) {
+  searchActorById(id: number) {
     let searchUrl = apiUrl + 'actors/' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
   }
-  searchMovie(id: number) {
+  searchMovieById(id: number) {
     let searchUrl = apiUrl + 'movies/' + id;
     return this._http.get(searchUrl)
       .map(res => res.json());
