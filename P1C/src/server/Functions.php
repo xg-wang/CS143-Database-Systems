@@ -5,15 +5,15 @@ class DBOperation{
 	private $db;
 
 	function DBOperation () {
-		$dbhost = "localhost:3306";
+		/*$dbhost = "localhost:3306";
 		$dbuser = "root";
 		$dbpass = "Wangym0124";
-		$dbname = "test";
+		$dbname = "test";*/
 
-		/*$dbhost = "localhost";
+		$dbhost = "localhost";
 		$dbuser = "cs143";
 		$dbpass = "";
-		$dbname = "CS143";*/
+		$dbname = "CS143";
 		$my_db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 		if($my_db->connect_errno > 0){
     		die('Unable to connect to database [' . $my_db->connect_error . ']');
@@ -259,15 +259,16 @@ class DBOperation{
             );
             $stmt->close();
 
-            $stmt = $this->db->prepare("SELECT ma.role, m.title FROM MovieActor ma, Movie m WHERE ma.mid = m.id AND ma.aid = ?");
+            $stmt = $this->db->prepare("SELECT ma.role, m.title, ma.mid FROM MovieActor ma, Movie m WHERE ma.mid = m.id AND ma.aid = ?");
             $stmt->bind_param('i', $aid);
             $stmt->execute();
-            $stmt->bind_result($role, $title);
+            $stmt->bind_result($role, $title, $mid);
             $amRelations = array();
             while ($row = $stmt->fetch()) {
                 $var = array(
                     "role" => $role,
                     "title" => $title,
+                    "mid" => $mid,
                 );
                 array_push($amRelations, $var);
             }
@@ -350,15 +351,16 @@ class DBOperation{
             };
             $stmt->close();
 
-            $stmt = $this->db->prepare("SELECT a.first, a.last, ma.role FROM Actor a, MovieActor ma WHERE a.id = ma.aid AND ma.mid = ?");
+            $stmt = $this->db->prepare("SELECT a.first, a.last, ma.aid, ma.role FROM Actor a, MovieActor ma WHERE a.id = ma.aid AND ma.mid = ?");
             $stmt->bind_param('i', $mid);
             $stmt->execute();
-            $stmt->bind_result($first, $last, $role);
+            $stmt->bind_result($first, $last, $aid, $role);
             $amRelation = array();
             while ($row = $stmt->fetch()) {
                 $var = array(
                     "first" => $first,
                     "last" => $last,
+                    "aid" => $aid,
                     "role" => $role,
                 );
                 array_push($amRelation, $var);
