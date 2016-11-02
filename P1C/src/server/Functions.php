@@ -26,7 +26,7 @@ class DBOperation{
 		//get parameters
 		$last = $actor['last'];
 		$first = $actor['first'];
-		$sex = $sex['sex'];
+		$sex = $actor['sex'];
 		$dob = $actor['dob'];
 		$dod = $actor['dod'];
 
@@ -51,12 +51,14 @@ class DBOperation{
         }
         $stmt->close();
 
-		if ( $stmt = $this->db->prepare("INSERT INTO Actor(id, last, first, sex, dob, dod) Values (?, ?, ?, ?, ?, ?)") ){
-            $stmt->bind_param('isssss', $newID, $last, $first, $sex, $dob, $dod);
-            $stmt->execute();
+        if($dod == ''){
+            $stmt = $this->db->prepare("INSERT INTO Actor(id, last, first, sex, dob, dod) Values (?, ?, ?, ?, ?, NULL)");
+            $stmt->bind_param('issss', $newID, $last, $first, $sex, $dob);
         } else {
-            echo "create_a_user: insert statement went wrong";
+            $stmt = $this->db->prepare("INSERT INTO Actor(id, last, first, sex, dob, dod) Values (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param('isssss', $newID, $last, $first, $sex, $dob, $dod);
         }
+        $stmt->execute();
 		$stmt->close();
 
 	}
@@ -89,13 +91,15 @@ class DBOperation{
         }
         $stmt->close();
 
-		if ( $stmt = $this->db->prepare("INSERT INTO Director(id, last, first, dob, dod) Values (?, ?, ?, ?, ?)") ){
-            $stmt->bind_param('issss', $newID, $last, $first, $dob, $dod);
-            $stmt->execute();
+        if($dod == ''){
+            $stmt = $this->db->prepare("INSERT INTO Director(id, last, first, dob, dod) Values (?, ?, ?, ?, NULL)");
+            $stmt->bind_param('isss', $newID, $last, $first, $dob);
         } else {
-            echo "create_a_user: insert statement went wrong";
+            $stmt = $this->db->prepare("INSERT INTO Director(id, last, first, dob, dod) Values (?, ?, ?, ?, ?)");
+            $stmt->bind_param('issss', $newID, $last, $first, $dob, $dod);
         }
-		$stmt->close();
+        $stmt->execute();
+        $stmt->close();
 		
 	}
 

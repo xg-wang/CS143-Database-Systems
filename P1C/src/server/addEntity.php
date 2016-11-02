@@ -23,7 +23,7 @@
                 $result = "Please choose the actor's gender.";
             } else if ($data['dob'] == '' || !checkdate($dateDob["month"], $dateDob["day"], $dateDob["year"])){
                 $result = "Please enter a valid date of birth";
-            } else if ($data['dod'] == '' || !checkdate($dateDod["month"], $dateDod["day"], $dateDod["year"])){
+            } else if ($data['dod'] != '' && !checkdate($dateDod["month"], $dateDod["day"], $dateDod["year"])){
                 $result = "Please enter a valid date of death";
             } else if ($entity == 'actor'){
                 $db_manager->addActor($data);
