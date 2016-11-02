@@ -10,12 +10,13 @@ import { FormData } from '../../models/form-data';
 export class AddPeopleComponent implements OnInit {
   active = true;
   peopleForm = new FormData();
+  entity: string;
 
   constructor(private _bruimdbService: BruimdbServiceService) { }
 
   onSubmit() {
     this._bruimdbService.addEntity({
-      'entity': this.peopleForm.entity,
+      'entity': this.entity,
       'data': this.peopleForm
     }).subscribe(res => {
       // TODO: move this

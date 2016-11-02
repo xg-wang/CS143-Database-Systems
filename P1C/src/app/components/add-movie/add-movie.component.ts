@@ -34,9 +34,8 @@ export class AddMovieComponent implements OnInit {
   constructor(private _bruimdbService: BruimdbServiceService) { }
 
   onSubmit() {
-    this.movieForm.entity = 'movie';
     this._bruimdbService.addEntity({
-      'entity': this.movieForm.entity,
+      'entity': 'movie',
       'data': this.movieForm
     }).subscribe(res => {
         console.log(res);

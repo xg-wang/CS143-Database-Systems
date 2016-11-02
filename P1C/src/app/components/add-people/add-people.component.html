@@ -4,7 +4,7 @@
     <form #addPeopleForm="ngForm" (ngSubmit)="onSubmit()">
       <table class="compact-table-row">
         <tr>
-          <md-radio-group name="entity" id="entity" required [(ngModel)]="peopleForm.entity">
+          <md-radio-group name="entity" id="entity" required [(ngModel)]="entity">
             <md-radio-button value="actor">Actor</md-radio-button>
             <md-radio-button value="director">Director</md-radio-button>
           </md-radio-group>

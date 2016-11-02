@@ -1,5 +1,4 @@
 export class FormData {
-  entity: string;
   // people
   first: string;
   last: string;
