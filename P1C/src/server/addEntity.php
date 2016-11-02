@@ -11,8 +11,8 @@
         $json = json_decode(file_get_contents('php://input'), true);
         $entity = $json["entity"];
         $data = $json["data"];
-        $dateDob = date_parse($data['dob']);
-        $dateDod = date_parse($data['dod']);
+        $dateDob = explode('-', $data['dob']);
+        $dateDod = explode('-', $data['dod']);
         
         if ($entity == 'actor' || $entity == 'director') {
             if($data['first'] == '' || $data['last'] == ''){
@@ -21,9 +21,9 @@
                 $result = "Invalid syntax for first and last name.";
             } else if ($entity == 'actor' && $data['sex'] == ''){
                 $result = "Please choose the actor's gender.";
-            } else if ($data['dob'] == '' || !checkdate($dateDob["month"], $dateDob["day"], $dateDob["year"])){
+            } else if ($data['dob'] == '' || !checkdate($dateDob[1], $dateDob[2], $dateDob[0])){
                 $result = "Please enter a valid date of birth";
-            } else if ($data['dod'] != '' && !checkdate($dateDod["month"], $dateDod["day"], $dateDod["year"])){
+            } else if ($data['dod'] != '' && !checkdate($dateDod[1], $dateDod[2], $dateDod[0])){
                 $result = "Please enter a valid date of death";
             } else if ($entity == 'actor'){
                 $db_manager->addActor($data);
