@@ -8,25 +8,41 @@
     case "POST":
         $json = json_decode(file_get_contents('php://input'), true);
 
-        $relation = $json["relation"];
-        $data = $json['data'];
+        $relation = $json["entity"];
+        $data = $json["data"];
 
-        if ($relation == 'actorMovie' && $data['entityA'] == '') {
-            $result = "You must type a movie.";
-        } else if($data['entityB'] == ''){
-            $result = "You must type a actor.";
-        }else{
-            $db_manager->addActorMovie($data);
-            $result = "Successfully add a movie-actor relation.";
+        if ($relation == 'actorMovie') {
+            if($data['entityA'] == ''){
+                $result = "You must type a movie.";
+            } else if($data['entityB'] == ''){
+                $result = "You must type a actor.";
+            }else{
+                $result = $db_manager->addActorMovie($data);
+                if($result == -1){
+                    $result = "movie does not exits";
+                }else if($result == -2){
+                    $result = "actor does not exits";
+                }else {
+                    $result = "Successfully add a movie-actor relation.";
+                }
+            }
         }
 
-        if ($relation == 'directorMovie' && $data['entityA'] == '') {
-            $result = "You must type a movie.";
-        } else if($data['entityB'] == ''){
-            $result = "You must type a director.";
-        }else{
-            $db_manager->addDirectorMovie($data);
-            $result = "Successfully add a movie-director relation.";
+        if ($relation == 'directorMovie') {
+            if($data['entityA'] == ''){
+                $result = "You must type a movie.";
+            } else if($data['entityB'] == ''){
+                $result = "You must type a director.";
+            }else{
+                $result = $db_manager->addDirectorMovie($data);
+                if($result == -1){
+                    $result = "movie does not exits";
+                }else if($result == -2){
+                    $result = "director does not exits";
+                }else {
+                    $result = "Successfully add a movie-director relation.";
+                }
+            }
         }
     break;
     }

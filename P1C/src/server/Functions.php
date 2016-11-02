@@ -182,6 +182,7 @@ class DBOperation{
 		$movie = $data['entityA'];
 		$actor = $data['entityB'];
 		$role = $data['role'];
+
 		if ( $stmt = $this->db->prepare("SELECT id FROM Movie WHERE title = ?") ){
             $stmt->bind_param('s', $movie);
             $stmt->execute();
@@ -203,6 +204,13 @@ class DBOperation{
         }
         $stmt->close();
 
+        if(is_null($mid)){
+            $result = -1;
+            return $result;
+        }else if(is_null($aid)){
+            $result = -2;
+            return $result;
+        }
 		if ( $stmt = $this->db->prepare("INSERT INTO MovieActor(mid, aid, role) VALUES (?, ?, ?)") ){
 			$stmt->bind_param('iis', $mid, $aid, $role);
             $stmt->execute();
@@ -237,6 +245,13 @@ class DBOperation{
         }
         $stmt->close();
         
+        if(is_null($mid)){
+            $result = -1;
+            return $result;
+        }else if(is_null($did)){
+            $result = -2;
+            return $result;
+        }
 		if ( $stmt = $this->db->prepare("INSERT INTO MovieDirector(mid, did) VALUES (?, ?)") ){
 			$stmt->bind_param('ii', $mid, $did);
             $stmt->execute();
