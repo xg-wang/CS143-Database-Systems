@@ -5,15 +5,15 @@ class DBOperation{
 	private $db;
 
 	function DBOperation () {
-		$dbhost = "localhost:3306";
+		/*$dbhost = "localhost:3306";
 		$dbuser = "root";
 		$dbpass = "Wangym0124";
-		$dbname = "test";
+		$dbname = "test";*/
 
-		/*$dbhost = "localhost";
+		$dbhost = "localhost";
 		$dbuser = "cs143";
 		$dbpass = "";
-		$dbname = "CS143";*/
+		$dbname = "CS143";
 		$my_db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 		if($my_db->connect_errno > 0){
     		die('Unable to connect to database [' . $my_db->connect_error . ']');
@@ -155,10 +155,10 @@ class DBOperation{
 		$title = $review['title'];
 		$name = $review['name'];
 		$rating = $review['rating'];
-		$comment = $review['comment'];
+		$cmt = $review['comment'];
 		$datum = new DateTime();
 		$time = $datum->format('Y-m-d H:i:s');
-
+        //return $cmt;
 		if ( $stmt = $this->db->prepare("SELECT id FROM Movie WHERE title = ?") ){
 			$stmt->bind_param('s', $title);
             $stmt->execute();
@@ -169,8 +169,8 @@ class DBOperation{
         }
         $stmt->close();
 
-		if ( $stmt = $this->db->prepare("INSERT INTO Review(name, time, mid, rating, comment) VALUES (?, ?, ?, ?, ?)") ){
-			$stmt->bind_param('ssiis', $name, $time, $id, $rating, $comment);
+		if ( $stmt = $this->db->prepare("INSERT INTO Review(name, time, mid, rating, comment) VALUES(?, ?, ?, ?, ?)") ){
+			$stmt->bind_param('ssiis', $name, $time, $id, $rating, $cmt);
             $stmt->execute();
         } else {
             echo "create_a_user: insert statement went wrong";
@@ -398,14 +398,14 @@ class DBOperation{
             $stmt = $this->db->prepare("SELECT time, name, rating, comment FROM Review WHERE mid = ? ORDER BY time DESC");
             $stmt->bind_param('i', $mid);
             $stmt->execute();
-            $stmt->bind_result($time, $name, $rating, $comment);
+            $stmt->bind_result($time, $name, $rating, $cmt);
             $comments = array();
             while ($row = $stmt->fetch()) {
                 $var = array(
                     "time" => $time,
                     "name" => $name,
                     "rating" => $rating,
-                    "comment" => $commemt,
+                    "comment" => $cmt,
                 );
                 array_push($comments, $var);
             };
