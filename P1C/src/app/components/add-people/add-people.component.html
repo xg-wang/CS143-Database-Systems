@@ -1,28 +1,44 @@
 <md-card class="card-basic half-width">
   <md-toolbar color="primary">Add new Actor/Director</md-toolbar>
   <md-card-content>
-    <form>
+    <form #addPeopleForm="ngForm" (ngSubmit)="onSubmit()">
       <table class="compact-table-row">
         <tr>
-          <md-radio-group>
+          <md-radio-group name="entity" id="entity" required [(ngModel)]="peopleForm.entity">
             <md-radio-button value="actor">Actor</md-radio-button>
             <md-radio-button value="director">Director</md-radio-button>
           </md-radio-group>
         </tr>
         <tr>
-          <td><md-input placeholder="First Name" class="full-width"></md-input></td>
-          <td><md-input placeholder="Last Name" class="full-width"></md-input></td>
+          <td><md-input placeholder="First Name"
+                        class="full-width"
+                        name="first"
+                        id="first"
+                        [(ngModel)]="peopleForm.first"></md-input></td>
+          <td><md-input placeholder="Last Name"
+                        class="full-width"
+                        name="last"
+                        id="last"
+                        [(ngModel)]="peopleForm.last"></md-input></td>
         </tr>
         <tr>
-          <md-radio-group>
+          <md-radio-group name="sex" id="sex" [(ngModel)]="peopleForm.sex">
             <md-radio-button value="male">Male</md-radio-button>
             <md-radio-button value="female">Female</md-radio-button>
           </md-radio-group>
         </tr>
       </table>
 
-      <md-input class="full-width" placeholder="Date of Birth: 1997-05-05"></md-input>
-      <md-input class="full-width" placeholder="Date of Die (leave blank if alive now)"></md-input>
+      <md-input class="full-width"
+                placeholder="Date of Birth: 1997-05-05"
+                name="dob"
+                id="dob"
+                [(ngModel)]="peopleForm.dob"></md-input>
+      <md-input class="full-width"
+                placeholder="Date of Die (leave blank if alive now)"
+                name="dod"
+                id="dod"
+                [(ngModel)]="peopleForm.dod"></md-input>
 
       <button md-mini-fab type="submit"><md-icon>check circle</md-icon></button>
     </form>

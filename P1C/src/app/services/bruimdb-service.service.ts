@@ -39,10 +39,13 @@ export class BruimdbServiceService {
       .map(res => res.json());
   }
 
-  addEntity(data: any, entity: string) {
+  addEntity(data: any) {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    let url = addEntityUrl + 'entity=' + entity;
+    let url = addEntityUrl;
+    console.log(url);
+    console.log(data);
     return this._http.post(url, data, options);
+    // TODO: retrurn msg!
   }
 }
