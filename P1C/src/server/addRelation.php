@@ -12,15 +12,16 @@
         $data = $json["data"];
 
         if ($relation == 'actorMovie') {
-            if($data['entityA'] == ''){
+            
+            if($data['title'] == ''){
                 $result = "You must type a movie.";
-            } else if($data['entityB'] == ''){
+            } else if($data['name'] == ''){
                 $result = "You must type a actor.";
             }else{
                 $result = $db_manager->addActorMovie($data);
-                if($result == -1){
+                if($result == 1){
                     $result = "movie does not exits";
-                }else if($result == -2){
+                }else if($result == 2){
                     $result = "actor does not exits";
                 }else {
                     $result = "Successfully add a movie-actor relation.";
@@ -29,15 +30,15 @@
         }
 
         if ($relation == 'directorMovie') {
-            if($data['entityA'] == ''){
+            if($data['title'] == ''){
                 $result = "You must type a movie.";
-            } else if($data['entityB'] == ''){
+            } else if($data['name'] == ''){
                 $result = "You must type a director.";
             }else{
                 $result = $db_manager->addDirectorMovie($data);
-                if($result == -1){
+                if($result == 1){
                     $result = "movie does not exits";
-                }else if($result == -2){
+                }else if($result == 2){
                     $result = "director does not exits";
                 }else {
                     $result = "Successfully add a movie-director relation.";

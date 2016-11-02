@@ -158,7 +158,7 @@ class DBOperation{
 		$cmt = $review['comment'];
 		$datum = new DateTime();
 		$time = $datum->format('Y-m-d H:i:s');
-        //return $cmt;
+
 		if ( $stmt = $this->db->prepare("SELECT id FROM Movie WHERE title = ?") ){
 			$stmt->bind_param('s', $title);
             $stmt->execute();
@@ -179,8 +179,8 @@ class DBOperation{
 	}
 
 	function addActorMovie($data){
-		$movie = $data['entityA'];
-		$actor = $data['entityB'];
+		$movie = $data['title'];
+		$actor = $data['name'];
 		$role = $data['role'];
 
 		if ( $stmt = $this->db->prepare("SELECT id FROM Movie WHERE title = ?") ){
@@ -204,11 +204,11 @@ class DBOperation{
         }
         $stmt->close();
 
-        if(is_null($mid)){
-            $result = -1;
+        if($mid == 0){
+            $result = 1;
             return $result;
-        }else if(is_null($aid)){
-            $result = -2;
+        }else if($aid == 0){
+            $result = 2;
             return $result;
         }
 		if ( $stmt = $this->db->prepare("INSERT INTO MovieActor(mid, aid, role) VALUES (?, ?, ?)") ){
@@ -221,8 +221,8 @@ class DBOperation{
 	}
 
 	function addDirectorMovie($data){
-		$movie = $data['entityA'];
-		$director = $data['entityB'];
+		$movie = $data['title'];
+		$director = $data['name'];
 		$role = $data['role'];
 		if ( $stmt = $this->db->prepare("SELECT id FROM Movie WHERE title = ?") ){
             $stmt->bind_param('s', $movie);
@@ -245,11 +245,11 @@ class DBOperation{
         }
         $stmt->close();
         
-        if(is_null($mid)){
-            $result = -1;
+        if($mid == 0){
+            $result = 1;
             return $result;
-        }else if(is_null($did)){
-            $result = -2;
+        }else if($did == 0){
+            $result = 2;
             return $result;
         }
 		if ( $stmt = $this->db->prepare("INSERT INTO MovieDirector(mid, did) VALUES (?, ?)") ){
