@@ -30,7 +30,6 @@ export class MovieComponent implements OnInit {
     this._route.params
       .map(params => params['id'])
       .subscribe(id => {
-        console.log(id);
         this._bruimdbService.searchMovieById(id)
           .subscribe(res => {
             this.movieInfo = res.movieInfo;
@@ -39,7 +38,7 @@ export class MovieComponent implements OnInit {
             this.genres = res.genres;
             this.reviews = res.reviews;
             this.aveRating = res.aveRating;
-            console.log(this.reviews);
+            console.log(res);
           });
       });
   }
