@@ -1,28 +1,32 @@
 <md-card class="card-basic half-width">
   <md-toolbar color="primary">Add Movie-Actor Relation</md-toolbar>
   <md-card-content>
-    <form>
+    <form #addDmRelation="ngForm" (ngSubmit)="onSubmit()">
       <table class="compact-table-row">
         <tr>
           <td>
             <md-input placeholder="Movie"
                       class="full-width"
-                      [md-menu-trigger-for]="movieMenu">
+                      name="movie"
+                      [(ngModel)]="relationForm.title">
+                      <!--[md-menu-trigger-for]="movieMenu">-->
             </md-input>
-            <md-menu x-position="after" #movieMenu="mdMenu">
-              <!--TODO: *ngFor-->
-            </md-menu>
+            <!--<md-menu x-position="after" #movieMenu="mdMenu">-->
+              <!--&lt;!&ndash;TODO: *ngFor&ndash;&gt;-->
+            <!--</md-menu>-->
           </td>
         </tr>
         <tr>
           <td>
             <md-input placeholder="Director"
                       class="full-width"
-                      [md-menu-trigger-for]="directorMenu">
+                      name="director"
+                      [(ngModel)]="relationForm.name">
+                      <!--[md-menu-trigger-for]="directorMenu">-->
             </md-input>
-            <md-menu x-position="after" #directorMenu="mdMenu">
-              <!--TODO: *ngFor-->
-            </md-menu>
+            <!--<md-menu x-position="after" #directorMenu="mdMenu">-->
+              <!--&lt;!&ndash;TODO: *ngFor&ndash;&gt;-->
+            <!--</md-menu>-->
           </td>
         </tr>
       </table>

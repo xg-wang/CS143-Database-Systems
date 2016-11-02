@@ -10,11 +10,10 @@
         <td><i>MPAA Rating: </i>{{movieInfo.rating}}</td>
         <td><i>Director: </i>{{director.first}} {{director.last}}</td>
       </tr>
-      <tr>
-        <td><i>Genre:</i></td>
-        <td *ngFor="let genre of genres"> {{genre}} </td>
-      </tr>
     </table>
+    <p md-line>
+      <i>Genre: </i>{{genres.toString()}}
+    </p>
   </md-card-content>
 </md-card>
 
@@ -36,6 +35,7 @@
 
 <md-list class="card-basic half-width" *ngIf="reviews">
   <md-toolbar color="primary">Rating: {{aveRating}}</md-toolbar>
+  <br>
   <md-toolbar color="primary">Reviews for this movie</md-toolbar>
   <md-list-item *ngFor="let review of reviews">
     <h3 md-line>
@@ -43,8 +43,34 @@
       <span>{{review.time}}</span>
     </h3>
     <p>
-      <span><strong>Rating: {{review.rating}}  </strong></span>
+      <span><strong>Rating: {{review.rating}}</strong></span>
       <span>{{review.comment}}</span>
     </p>
   </md-list-item>
+  <br>
+  <md-list-item>
+    <h3 md-line class="textLeft">Add Your Rating & Review!</h3>
+    <button md-mini-fab (click)="onClickAddReview()">
+      <md-icon>note_add</md-icon>
+    </button>
+  </md-list-item>
+  <md-list-item>
+    <md-input placeholder="Character count (100 max)"
+              maxlength="100"
+              class="full-width"
+              name="comment"
+              [(ngModel)]="reviewToAdd.comment"
+              #characterCountHint>
+      <md-hint align="end">{{characterCountHint.characterCount}} / 100</md-hint>
+    </md-input>
+  </md-list-item>
+  <md-list-item>
+    <md-input placeholder="Your Rating (1-5)"
+              name="rating"
+              [(ngModel)]="reviewToAdd.rating"></md-input>
+    <md-input placeholder="Your Name"
+              name="name"
+              [(ngModel)]="reviewToAdd.name"></md-input>
+  </md-list-item>
+
 </md-list>

@@ -4,8 +4,8 @@ import 'rxjs/add/operator/map';
 
 const apiUrl = 'http://localhost:1438/~cs143/server/';
 const searchApiUrl = apiUrl + 'search.php?';
-const addRelationUrl = apiUrl + 'addRelation.php?';
-const addEntityUrl = apiUrl + 'addEntity.php?';
+const addRelationUrl = apiUrl + 'addRelation.php';
+const addEntityUrl = apiUrl + 'addEntity.php';
 
 @Injectable()
 export class BruimdbServiceService {
@@ -45,7 +45,16 @@ export class BruimdbServiceService {
     let url = addEntityUrl;
     console.log(url);
     console.log(data);
-    return this._http.post(url, data, options);
-    // TODO: retrurn msg!
+    return this._http.post(url, data, options)
+      .map(res => res.json());
+  }
+  addRelation(data: any) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    let url = addRelationUrl;
+    console.log(url);
+    console.log(data);
+    return this._http.post(url, data, options)
+      .map(res => res.json());
   }
 }

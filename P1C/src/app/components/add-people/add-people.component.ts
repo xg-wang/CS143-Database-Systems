@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BruimdbServiceService } from '../../services/bruimdb-service.service';
-import { PeopleForm } from '../../models/people-form';
+import { FormData } from '../../models/form-data';
 
 @Component({
   selector: 'app-add-people',
@@ -9,7 +9,7 @@ import { PeopleForm } from '../../models/people-form';
 })
 export class AddPeopleComponent implements OnInit {
   active = true;
-  peopleForm = new PeopleForm();
+  peopleForm = new FormData();
 
   constructor(private _bruimdbService: BruimdbServiceService) { }
 
@@ -17,6 +17,9 @@ export class AddPeopleComponent implements OnInit {
     this._bruimdbService.addEntity({
       'entity': this.peopleForm.entity,
       'data': this.peopleForm
+    }).subscribe(res => {
+      // TODO: move this
+      console.log(res);
     });
   }
   ngOnInit() {

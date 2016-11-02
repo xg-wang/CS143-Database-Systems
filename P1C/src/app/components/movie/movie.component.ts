@@ -18,11 +18,15 @@ export class MovieComponent implements OnInit {
   genres: string[];
   reviews: Review[];
   aveRating: number;
+  reviewToAdd: Review = new Review();
 
   constructor(private _bruimdbService: BruimdbServiceService,
               private _route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.update();
+  }
+  update() {
     this._route.params
       .map(params => params['id'])
       .subscribe(id => {
@@ -35,7 +39,18 @@ export class MovieComponent implements OnInit {
             this.genres = res.genres;
             this.reviews = res.reviews;
             this.aveRating = res.aveRating;
+            console.log(this.reviews);
           });
       });
+  }
+  onClickAddReview() {
+    this.reviewToAdd.title = this.movieInfo.title;
+    this._bruimdbService.addEntity({
+      'entity': 'review',
+      'data': this.reviewToAdd
+    }).subscribe(res => {
+      console.log(res);
+      this.update();
+    });
   }
 }

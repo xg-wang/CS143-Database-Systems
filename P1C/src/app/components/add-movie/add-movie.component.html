@@ -1,27 +1,35 @@
 <md-card class="card-basic half-width">
   <md-toolbar color="primary">Add new Movie</md-toolbar>
   <md-card-content>
-    <form>
+    <form #addMovieForm="ngForm" (ngSubmit)="onSubmit()">
       <table class="compact-table-row">
         <tr>
-          <td><md-input placeholder="Title" class="full-width"></md-input></td>
-          <td><md-input placeholder="Company" class="full-width"></md-input></td>
+          <td><md-input placeholder="Title" class="full-width"
+                        name="title"
+                        [(ngModel)]="movieForm.title"></md-input></td>
+          <td><md-input placeholder="Company" class="full-width"
+                        name="company"
+                        [(ngModel)]="movieForm.company"></md-input></td>
         </tr>
         <tr>
-          <td><md-input placeholder="Year" class="full-width"></md-input></td>
+          <td><md-input placeholder="Year" class="full-width"
+                        name="year"
+                        [(ngModel)]="movieForm.year"></md-input></td>
           <td>
             <md-input placeholder="MPAA Rating"
                       class="full-width"
-                      [md-menu-trigger-for]="ratingMenu">
+                      [md-menu-trigger-for]="ratingMenu"
+                      name="rating"
+                      [(ngModel)]="movieForm.rating">
               <md-icon>arrow_drop_down</md-icon>
             </md-input>
             <md-menu x-position="after" #ratingMenu="mdMenu">
-              <button md-menu-item>G</button>
-              <button md-menu-item>NC-17</button>
-              <button md-menu-item>PG</button>
-              <button md-menu-item>PG-13</button>
-              <button md-menu-item>R</button>
-              <button md-menu-item>surrendered</button>
+              <button md-menu-item value="G">G</button>
+              <button md-menu-item value="NC-17">NC-17</button>
+              <button md-menu-item value="PG">PG</button>
+              <button md-menu-item value="PG-13">PG-13</button>
+              <button md-menu-item value="R">R</button>
+              <button md-menu-item value="surrendered">surrendered</button>
             </md-menu>
           </td>
         </tr>
@@ -29,8 +37,11 @@
       <div class="checkBoxes">
         <i>Genres: </i>
         <br>
-        <md-checkbox *ngFor="let genre of genres">
-          {{genre}}
+        <md-checkbox *ngFor="let genre of genres"
+                     name={{genre.name}}
+                     [(ngModel)]="genre.selected"
+                     (ngModelChange)="onSelectGenre(genre.name, genre.selected)">
+          {{genre.name}}
         </md-checkbox>
       </div>
       <button md-mini-fab type="submit"><md-icon>check circle</md-icon></button>

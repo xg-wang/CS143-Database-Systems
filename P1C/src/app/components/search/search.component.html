@@ -11,10 +11,6 @@
         name="search"
       >
       </md-input>
-      <button md-raised-button color="primary"
-              (click)="search()">
-        Search!
-      </button>
       <section class="full-width">
         <md-checkbox name="searchActor" [(ngModel)]="searchActorOption">
           search actor
@@ -23,6 +19,9 @@
           search movie
         </md-checkbox>
       </section>
+      <button md-button color="primary" (click)="search()">
+        Search!
+      </button>
     </form>
   </md-card-content>
 </md-card>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormData } from '../../models/form-data';
+import { BruimdbServiceService } from '../../services/bruimdb-service.service';
 
 @Component({
   selector: 'app-add-am-relation',
@@ -6,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-am-relation.component.css']
 })
 export class AddAmRelationComponent implements OnInit {
+  relationForm = new FormData();
 
-  constructor() { }
+  constructor(private _bruimdbService: BruimdbServiceService) { }
 
+  onSubmit() {
+    this._bruimdbService.addEntity({
+      'entity': 'actorMovie',
+      'data': this.relationForm
+    }).subscribe(res => {
+      console.log(res);
+    });
+  }
   ngOnInit() {
   }
 
