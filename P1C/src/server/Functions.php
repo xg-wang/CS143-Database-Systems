@@ -5,15 +5,15 @@ class DBOperation{
 	private $db;
 
 	function DBOperation () {
-		/*$dbhost = "localhost:3306";
+		$dbhost = "localhost:3306";
 		$dbuser = "root";
 		$dbpass = "Wangym0124";
-		$dbname = "test";*/
+		$dbname = "test";
 
-		$dbhost = "localhost";
+		/*$dbhost = "localhost";
 		$dbuser = "cs143";
 		$dbpass = "";
-		$dbname = "CS143";
+		$dbname = "CS143";*/
 		$my_db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 		if($my_db->connect_errno > 0){
     		die('Unable to connect to database [' . $my_db->connect_error . ']');
@@ -139,13 +139,15 @@ class DBOperation{
         }
 		$stmt->close();
 		
-		if ( $stmt = $this->db->prepare("INSERT INTO MovieGenre(mid, genre) Values (?, ?)") ){
-            $stmt->bind_param('is', $newID, $genre);
-            $stmt->execute();
-        } else {
-            echo "create_a_user: insert statement went wrong";
+        for($i = 0; $i < count($genre); $i++){
+    		if ( $stmt = $this->db->prepare("INSERT INTO MovieGenre(mid, genre) Values (?, ?)") ){
+                $stmt->bind_param('is', $newID, $genre[$i]);
+                $stmt->execute();
+            } else {
+                echo "create_a_user: insert statement went wrong";
+            }
+    		$stmt->close();
         }
-		$stmt->close();
 		
 	}
 
