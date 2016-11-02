@@ -12,10 +12,14 @@
       >
       </md-input>
       <section class="full-width">
-        <md-checkbox name="searchActor" [(ngModel)]="searchActorOption">
+        <md-checkbox name="searchActor"
+                     [(ngModel)]="searchActorOption"
+                     (ngModelChange)="onActorCheckBoxChange(searchActorOption)" >
           search actor
         </md-checkbox>
-        <md-checkbox name="searchMovie" [(ngModel)]="searchMovieOption">
+        <md-checkbox name="searchMovie"
+                     [(ngModel)]="searchMovieOption"
+                     (ngModelChange)="onMovieCheckBoxChange(searchMovieOption)">
           search movie
         </md-checkbox>
       </section>

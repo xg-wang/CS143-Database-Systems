@@ -21,12 +21,22 @@ export class SearchComponent implements OnInit {
     let searchRes = this._bruimdbService.search(this.searchStr,
                                 this.searchActorOption,
                                 this.searchMovieOption);
-    searchRes.actors.subscribe(res => {
-      this.actorRes = res;
-    });
-    searchRes.movies.subscribe(res => {
-      this.movieRes = res;
-    });
+    if (this.searchActorOption) {
+      searchRes.actors.subscribe(res => {
+        this.actorRes = res;
+      });
+    }
+    if (this.searchMovieOption) {
+      searchRes.movies.subscribe(res => {
+        this.movieRes = res;
+      });
+    }
+  }
+  onActorCheckBoxChange(value) {
+    this.searchActorOption = value;
+  }
+  onMovieCheckBoxChange(value) {
+    this.searchMovieOption = value;
   }
 
   ngOnInit() {
