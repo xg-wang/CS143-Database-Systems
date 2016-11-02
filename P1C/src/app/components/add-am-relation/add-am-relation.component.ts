@@ -13,7 +13,7 @@ export class AddAmRelationComponent implements OnInit {
   constructor(private _bruimdbService: BruimdbServiceService) { }
 
   onSubmit() {
-    this._bruimdbService.addEntity({
+    this._bruimdbService.addRelation({
       'entity': 'actorMovie',
       'data': this.relationForm
     }).subscribe(res => {
