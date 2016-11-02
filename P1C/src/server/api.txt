@@ -74,10 +74,10 @@ POST:/addRelation.php?relation=?&entityA=?&entityB=?&role=?
 	role	 : role
 
 	{
-		'relation': 
+		'entity': 
 		'data'{
-			'entityA':
-			'entityB':
+			'title':
+			'name':
 			'role':
 		}
 	}
