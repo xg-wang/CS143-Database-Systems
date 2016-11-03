@@ -306,7 +306,7 @@ class DBOperation{
 
 	function searchActorsByName($name){
 		$parse_name = explode(' ', $name);
-		$statement = "SELECT id, first, last, dob FROM 
+		$statement = "SELECT id, last, first, dob FROM 
 			Actor WHERE (last LIKE '%$parse_name[0]%' OR first LIKE '%$parse_name[0]%')";
 		for($i = 1; $i < count($parse_name); $i++){
 			$statement = $statement."AND (last LIKE '%$parse_name[$i]%' OR first LIKE '%$parse_name[$i]%')";
