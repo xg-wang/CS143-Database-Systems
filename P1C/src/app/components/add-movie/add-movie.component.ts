@@ -29,6 +29,14 @@ export class AddMovieComponent implements OnInit {
     { 'name': 'War', 'selected': false },
     { 'name': 'Western', 'selected': false }
   ];
+  public ratings = [
+    'G',
+    'NC-17',
+    'PG',
+    'PG-13',
+    'R',
+    'surrendered'
+  ];
   movieForm = new FormData();
 
   constructor(private _bruimdbService: BruimdbServiceService) { }
@@ -50,6 +58,9 @@ export class AddMovieComponent implements OnInit {
         this.movieForm.genre.splice(index, 1);
       }
     }
+  }
+  updateRating(r: string) {
+    this.movieForm.rating = r;
   }
 
   ngOnInit() {

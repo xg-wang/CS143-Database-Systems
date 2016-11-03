@@ -24,12 +24,10 @@
               <md-icon>arrow_drop_down</md-icon>
             </md-input>
             <md-menu x-position="after" #ratingMenu="mdMenu">
-              <button md-menu-item value="G">G</button>
-              <button md-menu-item value="NC-17">NC-17</button>
-              <button md-menu-item value="PG">PG</button>
-              <button md-menu-item value="PG-13">PG-13</button>
-              <button md-menu-item value="R">R</button>
-              <button md-menu-item value="surrendered">surrendered</button>
+              <button md-menu-item *ngFor="let r of ratings" value={{r}}
+                      (click)="updateRating(r)">
+                {{r}}
+              </button>
             </md-menu>
           </td>
         </tr>
