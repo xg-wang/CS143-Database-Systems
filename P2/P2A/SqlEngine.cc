@@ -132,7 +132,38 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
 RC SqlEngine::load(const string& table, const string& loadfile, bool index)
 {
-  /* your code here */
+  fstream     lf;
+  RecordFile  rf;
+  RecordId    rid;
+
+  RC      rc;
+
+  // open load file
+  lf.open(loadfile, ios::in);
+  if (!lf.is_open()) {
+    fprintf(stderr, "Error: loadfile %s does not exist\n", loadfile.c_str());
+    return -1;
+  } 
+  // open the table file
+  if ((rc = rf.open(table + ".tbl", 'w')) < 0) {
+    fprintf(stderr, "Error: table %s does not exist\n", table.c_str());
+    return rc;
+  }
+
+  // parse each line
+  string line, value;
+  int key;
+  while (getline(lf, line)) {
+    if ((rc = SqlEngine::parseLoadLine(line, key, value)) < 0) {
+      fprintf(stderr, "Error: loadfile parse error, line: %s\n", line.c_str());
+      return rc;
+    }
+    rf.append(key, value, rid);
+  }
+
+  // finish loading, close all files
+  rf.close();
+  lf.close();
 
   return 0;
 }
