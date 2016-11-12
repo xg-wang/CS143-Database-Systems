@@ -116,6 +116,7 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 		memcpy(sibling.buffer+(pos-midPos)+sizeof(RecordId), &key, sizeof(int));
 		memcpy(sibling.buffer+(pos-midPos+size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
 	}
+	siblingKey = (int)(*(sibling.buffer+sizeof(RecordId)));
 	return 0; 
 }
 
@@ -131,7 +132,10 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  * @return 0 if searchKey is found. Otherwise return an error code.
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
-{ return 0; }
+{ 
+
+	return 0; 
+}
 
 /*
  * Read the (key, rid) pair from the eid entry.

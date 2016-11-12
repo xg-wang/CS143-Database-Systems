@@ -154,8 +154,8 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
   
   // parse each line
   string line, value;
-  /*
   int key;
+  /*
   RC error1, error2;
   PageId pid;
   int midKey;
