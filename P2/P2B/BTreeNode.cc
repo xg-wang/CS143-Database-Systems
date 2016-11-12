@@ -9,17 +9,24 @@ char* binarySearchKey(char *beg, char *end, int key, int step1, int size) {
 	end += step1;
 	while (beg <= end) {
 		char *mid = beg + ((end - beg)/size >> 2) * size;
-		if (*mid < key) {
-			beg = mid + size;
-		} else if (*mid == key) {
-			return mid - step1;
-		} else {
+		if (*mid > key || *mid == 0) {
 			end = mid - size;
+		} else if (*mid < key) {
+			beg = mid + size;
+		} else /*if (*mid == key)*/ {
+			return mid - step1;
 		}
 	}
 	return beg - step1;
 }
 
+
+BTLeafNode::BTLeafNode() 
+{
+	fill(buffer, buffer + PageFile::PAGE_SIZE, 0);
+	size = sizeof(RecordId) + sizeof(int);
+	maxKeyCount = (PageFile::PAGE_SIZE - sizeof(PageId)) / size;
+}
 /*
  * Read the content of the node from the page pid in the PageFile pf.
  * @param pid[IN] the PageId to read
@@ -50,11 +57,27 @@ int BTLeafNode::getKeyCount()
 {
 	int numkeys = 0;
 	int size = sizeof(RecordId) + sizeof(int);
-	for (char *pointer = buffer + sizeof(RecordId); 
-			 pointer<buffer+PageFile::PAGE_SIZE-sizeof(PageId) && (int)(*pointer)!=0; 
-			 pointer += size) {
-		numkeys++;
+	// binary search first key == 0
+	char *beg = buffer + sizeof(RecordId);
+	char *end = buffer + maxKeyCount*size + sizeof(RecordId);
+	while (beg <= end) {
+		char *mid = beg + ((end - beg)/size >> 2) * size;
+		if (*mid != 0) {
+			beg = mid + size;
+		} else if (beg == mid) {
+			return 0;
+		} else if (*(mid-size) == 0) {
+			end = mid - size;
+		} else /*if (*(mid-size) == 0)*/ {
+			return (mid - beg) / size;
+		}
 	}
+	// incremental method
+	// for (char *pointer = buffer + sizeof(RecordId); 
+	// 		 pointer<buffer+PageFile::PAGE_SIZE-sizeof(PageId) && (int)(*pointer)!=0; 
+	// 		 pointer += size) {
+	// 	numkeys++;
+	// }
 	return numkeys; 
 }
 
@@ -66,6 +89,7 @@ int BTLeafNode::getKeyCount()
  */
 RC BTLeafNode::insert(int key, const RecordId& rid)
 { 
+	// FIXME!
 	int keyCount = getKeyCount();
 	int size = sizeof(RecordId) + sizeof(int);
 	if (keyCount * size >= PageFile::PAGE_SIZE-sizeof(PageId)) {
@@ -94,6 +118,7 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 RC BTLeafNode::insertAndSplit(int key, const RecordId& rid, 
                               BTLeafNode& sibling, int& siblingKey)
 { 
+	// FIXME!
 	int keyCount = getKeyCount();
 	int size = sizeof(RecordId) + sizeof(int);
 	if (keyCount*size < PageFile::PAGE_SIZE-sizeof(PageId) ||
@@ -133,7 +158,6 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
 { 
-
 	return 0; 
 }
 
