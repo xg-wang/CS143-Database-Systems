@@ -11,10 +11,15 @@
 #include "SqlEngine.h"
 #include <cstdio>
 
+#include "test.h"
+
 int main()
 {
   // run the SQL engine taking user commands from standard input (console).
-  SqlEngine::run(stdin);
+  // SqlEngine::run(stdin);
+  
+  Tests tester;
+  tester.runTests();
 
   return 0;
 }
