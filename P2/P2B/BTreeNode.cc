@@ -10,7 +10,9 @@ using namespace std;
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTLeafNode::read(PageId pid, const PageFile& pf)
-{ return 0; }
+{
+	return pf.read(pid, buffer);
+}
     
 /*
  * Write the content of the node to the page pid in the PageFile pf.
@@ -19,14 +21,25 @@ RC BTLeafNode::read(PageId pid, const PageFile& pf)
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTLeafNode::write(PageId pid, PageFile& pf)
-{ return 0; }
+{ 
+	return pf.write(pid, buffer);
+}
 
 /*
  * Return the number of keys stored in the node.
  * @return the number of keys in the node
  */
 int BTLeafNode::getKeyCount()
-{ return 0; }
+{
+	int numkeys = 0;
+	int size = sizeof(RecordId) + sizeof(int);
+	for (char *pointer = buffer + sizeof(RecordId); 
+			 pointer < buffer + PageFile::PAGE_SIZE && (int)(*pointer) != -1; 
+			 pointer += size) {
+		numkeys++;
+	}
+	return 0; 
+}
 
 /*
  * Insert a (key, rid) pair to the node.
@@ -35,7 +48,10 @@ int BTLeafNode::getKeyCount()
  * @return 0 if successful. Return an error code if the node is full.
  */
 RC BTLeafNode::insert(int key, const RecordId& rid)
-{ return 0; }
+{ 
+
+	return 0; 
+}
 
 /*
  * Insert the (key, rid) pair to the node
