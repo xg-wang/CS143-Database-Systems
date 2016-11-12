@@ -204,7 +204,55 @@ RC BTNonLeafNode::insert(int key, PageId pid)
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, int& midKey)
-{ return 0; }
+{ 
+	int keyPidSize = sizeof(PageId) + sizeof(int);
+	if(getKeyCount() != 127){
+		return RC_INVALID_FILE_FORMAT;
+	}
+	if(sibling.getKeyCount() != 0){
+		return RC_INVALID_ATTRIBUTE;
+	}
+
+	int halfKeyPos = ((int)((getKeyCount() + 1) / 2))*keyPidSize + 4;
+	int preKey = -1;
+	int posKey = -1;
+	memcpy(&preKey, buffer + halfKeyPos - 8, sizeof(int));
+	memcpy(&posKey, buffer + halfKeyPos, sizeof(int));
+
+	if(key < preKey){
+		//copy the (key, pid) pairs after prekey to the sibling
+		memcpy(sibling.buffer + 4, buffer + halfKeyPos, PageFile::PAGE_SIZE - halfKeyPos);
+		//copy the pid immediately before prekey to the sibling
+		memcpy(sibling.buffer, buffer + halfKeyPos - 4, sizeof(PageId));
+		//copy the prekey value to midkey which will be push to the parent later
+		midKey = preKey;
+		//clear the buffer after prekey to be 0
+		std::fill(buffer + halfKeyPos - 8, buffer + PageFile::PAGE_SIZE, 0);
+		// insert the (key, pid) into buffer
+		insert(key, pid);
+	}else if(key > posKey){
+		//copy the (key, pid) pairs after poskey to the sibling
+		memcpy(sibling.buffer + 4, buffer + halfKeyPos + 8, PageFile::PAGE_SIZE - halfKeyPos - 8);
+		//copy the pid immediately before poskey to the sibling
+		memcpy(sibling.buffer, buffer + halfKeyPos + 4, sizeof(PageId));
+		//copy the poskey value to midkey which will be push to the parent later
+		midKey = posKey;
+		//clear the buffer after postkey to be 0
+		std::fill(buffer + halfKeyPos, buffer + PageFile::PAGE_SIZE, 0);
+		// insert the (key, pid) into sibling buffer
+		sibling.insert(key, pid);
+	}else{
+		//copy the (key, pid) pairs from poskey to the sibling
+		memcpy(sibling.buffer + 4, buffer + halfKeyPos, PageFile::PAGE_SIZE - halfKeyPos);
+		//set the begaining pid in sibling to be pid
+		memcpy(sibling.buffer, &pid, sizeof(PageId));
+		//clear the buffer from postkey to be 0
+		std::fill(buffer + halfKeyPos, buffer + PageFile::PAGE_SIZE, 0);
+		//copy the key value to midkey which will be push to the parent later
+		midKey = key;
+	}
+	return 0; 
+}
 
 /*
  * Given the searchKey, find the child-node pointer to follow and
