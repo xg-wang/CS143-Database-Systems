@@ -146,14 +146,14 @@ RC BTNonLeafNode::write(PageId pid, PageFile& pf)
 int BTNonLeafNode::getKeyCount()
 {
 	int numkeys = 0;
-	//skip the first pid
+	//skip the first pid and the last 4 bytes is empty
 	char* pointer = buffer+4;
 	int keyPidSize = sizeof(PageId) + sizeof(int);
-	int key = -1;
+	int key = 0;
 	memcpy(&key, pointer, sizeof(int));
-	while(key != -1){
+	while(key != 0){
 		numkeys++;
-		if(pointer + keyPidSize < buffer + 1024){
+		if(pointer + keyPidSize < buffer + 1020){
 			pointer += keyPidSize;
 			memcpy(&key, pointer, sizeof(int));
 		}else{
@@ -280,10 +280,10 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 {
 	char* temp = buffer + 4;
-	int key = -1;
+	int key = 0;
 	int keyPidSize = sizeof(PageId) + sizeof(int);
 	memcpy(&key, temp, sizeof(int));
-	while(key != -1){
+	while(key != 0){
 		if(searchKey < key){
 			memcpy(&pid, temp - 4, sizeof(PageId));
 			return 0;
@@ -315,4 +315,22 @@ RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
 		return error;
 	}
 	return 0; 
+}
+
+void BTNonLeafNode::print(RC error)
+{
+	int keyPidSize = sizeof(PageId) + sizeof(int);
+	char* pointer = buffer + 4;
+	for(int i=4; i<1024; i+=8)
+	{
+		int insideKey;
+		memcpy(&insideKey, pointer, sizeof(int));
+
+		cout << insideKey << " ";
+		
+		pointer += keyPidSize; 
+	}
+	cout << "# of Keys: " << getKeyCount();
+	cout << "" << endl;
+	cout << "error: " << error << endl;
 }
