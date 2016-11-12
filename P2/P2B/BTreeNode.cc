@@ -1,4 +1,5 @@
 #include "BTreeNode.h"
+#include <iostream>
 
 using namespace std;
 
@@ -94,7 +95,11 @@ RC BTLeafNode::setNextNodePtr(PageId pid)
 
 ////////////////////////////////////////////////////////////////////////////
 
-
+//nonleaf node constructor
+BTNonLeafNode::BTNonLeafNode()
+{
+	std::fill(buffer, buffer + PageFile::PAGE_SIZE, 0);
+}
 
 /*
  * Read the content of the node from the page pid in the PageFile pf.
@@ -128,9 +133,9 @@ int BTNonLeafNode::getKeyCount()
 	//skip the first pid
 	char* pointer = buffer+4;
 	int keyPidSize = sizeof(PageId) + sizeof(int);
-	int key = 0;
+	int key = -1;
 	memcpy(&key, pointer, sizeof(int));
-	while(key != 0){
+	while(key != -1){
 		numkeys++;
 		if(pointer + keyPidSize < buffer + 1024){
 			pointer += keyPidSize;
@@ -151,13 +156,39 @@ int BTNonLeafNode::getKeyCount()
  */
 RC BTNonLeafNode::insert(int key, PageId pid)
 {	
-
+	int keyPidSize = sizeof(PageId) + sizeof(int);
+	// 127: the maximum number of (key, pid) pairs that can be stored in one page
 	if(getKeyCount() == 127){
 		return RC_NODE_FULL;
 	}
 	//skip the first pid
-	char* pointer = buffer + 4;
-	
+	char* searchKeyPos = buffer + 4;
+	char* tempBuffer = (char*)malloc(PageFile::PAGE_SIZE);
+	std::fill(tempBuffer, tempBuffer + PageFile::PAGE_SIZE, 0);
+	int iteratorKey = -1;
+	memcpy(&iteratorKey, searchKeyPos, sizeof(int));
+	while(iteratorKey != -1){
+		if(searchKeyPos + keyPidSize < buffer + 1024 && iteratorKey < key && iteratorKey != 0){
+			searchKeyPos += keyPidSize;
+			memcpy(&iteratorKey, searchKeyPos, sizeof(int));
+		}else{
+			break;
+		}
+	}
+	int offset = searchKeyPos - buffer;
+	//copy the previous (key, pid) into tempbuffer
+	memcpy(tempBuffer, buffer, offset);
+
+	//insert the new (key, pid) into the tempbuffer
+	memcpy(tempBuffer + offset, &key, sizeof(int));
+	memcpy(tempBuffer + offset + sizeof(int), &pid, sizeof(PageId));
+
+	//append the rest (key, pid) from buffer to tempbuffer
+	memcpy(tempBuffer + offset + keyPidSize, buffer + offset, getKeyCount()*keyPidSize - offset + 4);
+
+	//cope the entire (key, pid) from tempbuffer to buffer
+	memcpy(buffer, tempBuffer, PageFile::PAGE_SIZE);
+	free(tempBuffer);
 
 	return 0; 
 }
@@ -185,10 +216,10 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 {
 	char* temp = buffer + 4;
-	int key;
+	int key = -1;
 	int keyPidSize = sizeof(PageId) + sizeof(int);
 	memcpy(&key, temp, sizeof(int));
-	while(key != 0){
+	while(key != -1){
 		if(searchKey < key){
 			memcpy(&pid, temp - 4, sizeof(PageId));
 			return 0;
