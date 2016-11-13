@@ -10,11 +10,11 @@ char* binarySearchKey(char *beg, char *end, int key, int step1, int size)
 	end += step1;
 	while (beg <= end) {
 		char *mid = beg + ((end - beg)/size >> 2) * size;
-		if (*mid > key || *mid == 0) {
+		if (*reinterpret_cast<int*>(mid) > key || *mid == 0) {
 			end = mid - size;
-		} else if (*mid < key) {
+		} else if (*reinterpret_cast<int*>(mid) < key) {
 			beg = mid + size;
-		} else /*if (*mid == key)*/ {
+		} else /*if (*reinterpret_cast<int*>(mid) != key)*/ {
 			return mid - step1;
 		}
 	}
@@ -61,23 +61,17 @@ int BTLeafNode::getKeyCount()
 	char *end = buffer + (maxKeyCount-1)*size + sizeof(RecordId);
 	while (beg <= end) {
 		char *mid = beg + ((end - beg)/size >> 2) * size;
-		if ((int)*mid != 0) {
+		if (*reinterpret_cast<int*>(mid) != 0) {
 			beg = mid + size;
 		} else if (beg == mid) {
 			return (mid - buffer - sizeof(RecordId)) / size;
-		} else if ((int)*(mid-size) == 0) {
+		} else if (*reinterpret_cast<int*>(mid-size) == 0) {
 			end = mid - size;
 		} else /*if (*(mid-size) == 0)*/ {
 			return (mid - buffer - sizeof(RecordId)) / size;
 		}
 	}
 	return (beg - buffer - sizeof(RecordId)) / size; 
-	// incremental method
-	// for (char *pointer = buffer + sizeof(RecordId); 
-	// 		 pointer<buffer+PageFile::PAGE_SIZE-sizeof(PageId) && (int)(*pointer)!=0; 
-	// 		 pointer += size) {
-	// 	numkeys++;
-	// }
 }
 
 /*
@@ -138,7 +132,7 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 		memcpy(sibling.buffer+(pos-midPos+2*size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
 	}
 	fill(midPos+size, buffer+PageFile::PAGE_SIZE-sizeof(PageId), 0);
-	siblingKey = (int)(*(sibling.buffer+sizeof(RecordId)));
+	siblingKey = *reinterpret_cast<int*>(sibling.buffer+sizeof(RecordId));
 	// TODO: [TBD] set pid for next node here or in the BTIndex.
 	// setNextNodePtr();
 	return 0; 
@@ -167,7 +161,7 @@ RC BTLeafNode::locate(int searchKey, int& eid)
 															searchKey,
 															sizeof(RecordId), size);
 	eid = (pos - buffer) / size;
-	return (int)(*(pos+sizeof(RecordId))) == searchKey ? 0 : RC_NO_SUCH_RECORD; 
+	return *reinterpret_cast<int*>(pos+sizeof(RecordId)) == searchKey ? 0 : RC_NO_SUCH_RECORD; 
 }
 
 /*
