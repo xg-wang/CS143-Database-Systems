@@ -118,6 +118,7 @@ class BTLeafNode {
  * BTNonLeafNode: The class representing a B+tree nonleaf node.
  */
 class BTNonLeafNode {
+  friend class Tests;
   public:
 
     /**
@@ -197,6 +198,8 @@ class BTNonLeafNode {
     * that contains the node.
     */
     char buffer[PageFile::PAGE_SIZE];
+    int maxKeyCount;
+    int keyPidSize;
 }; 
 
 #endif /* BTREENODE_H */
