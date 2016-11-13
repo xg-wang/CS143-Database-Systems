@@ -36,6 +36,12 @@ void Tests::testBTLeafNode() {
   cout << "sibling key = " << siblingKey << endl;
   printBuffer(node.buffer, sizeof(RecordId), node.size, node.maxKeyCount);
   printBuffer(siblingNode.buffer, sizeof(RecordId), siblingNode.size, siblingNode.maxKeyCount);
+
+  cout << "### Test locate" << endl;
+  int searchKey = 33;
+  int eid = -1;
+  node.locate(searchKey, eid);
+  cout << "eid for " << searchKey << " = " << eid << endl;
   
   cout << "### BT Leaf Node tests done" << endl;
 }

@@ -4,7 +4,8 @@
 using namespace std;
 
 // Utils
-char* binarySearchKey(char *beg, char *end, int key, int step1, int size) {
+char* binarySearchKey(char *beg, char *end, int key, int step1, int size) 
+{
 	beg += step1;
 	end += step1;
 	while (beg <= end) {
@@ -70,13 +71,13 @@ int BTLeafNode::getKeyCount()
 			return (mid - buffer - sizeof(RecordId)) / size;
 		}
 	}
+	return (beg - buffer - sizeof(RecordId)) / size; 
 	// incremental method
 	// for (char *pointer = buffer + sizeof(RecordId); 
 	// 		 pointer<buffer+PageFile::PAGE_SIZE-sizeof(PageId) && (int)(*pointer)!=0; 
 	// 		 pointer += size) {
 	// 	numkeys++;
 	// }
-	return (beg - buffer - sizeof(RecordId)) / size; 
 }
 
 /*
@@ -87,7 +88,6 @@ int BTLeafNode::getKeyCount()
  */
 RC BTLeafNode::insert(int key, const RecordId& rid)
 { 
-	// FIXME!
 	int keyCount = getKeyCount();
 	int size = sizeof(RecordId) + sizeof(int);
 	if (keyCount * size >= PageFile::PAGE_SIZE-sizeof(PageId)) {
@@ -116,9 +116,7 @@ RC BTLeafNode::insert(int key, const RecordId& rid)
 RC BTLeafNode::insertAndSplit(int key, const RecordId& rid, 
                               BTLeafNode& sibling, int& siblingKey)
 { 
-	// FIXME!
 	int keyCount = getKeyCount();
-	int size = sizeof(RecordId) + sizeof(int);
 	if (keyCount*size < PageFile::PAGE_SIZE-sizeof(PageId) ||
 			sibling.getKeyCount() > 0) {
 		return RC_INVALID_ATTRIBUTE;
@@ -157,7 +155,17 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
  */
 RC BTLeafNode::locate(int searchKey, int& eid)
 { 
-	return 0; 
+	int keyCount = getKeyCount();
+	int size = sizeof(RecordId) + sizeof(int);
+	if (keyCount * size >= PageFile::PAGE_SIZE-sizeof(PageId)) {
+		return RC_NODE_FULL;
+	}
+	char *pos = binarySearchKey(buffer,
+															buffer + (keyCount-1)*size,
+															searchKey,
+															sizeof(RecordId), size);
+	eid = (pos - buffer) / size;
+	return (int)(*(pos+sizeof(RecordId))) == searchKey ? 0 : RC_NO_SUCH_RECORD; 
 }
 
 /*
