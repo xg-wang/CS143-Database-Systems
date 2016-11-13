@@ -277,7 +277,7 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	char* pos = binarySearchKey(buffer, buffer + (keyCount - 1)*keyPidSize, 
 								key, sizeof(PageId), keyPidSize);
 	// move back one keyPidSize from pos to the last pageid 
-	memmove(pos + keyPidSize, pos, buffer + keyCount*keyPidSize - pos + sizeof(int));
+	memmove(pos + keyPidSize, pos, buffer + keyCount*keyPidSize - pos);
 	memcpy(pos, &pid, sizeof(PageId));
 	memcpy(pos + sizeof(PageId), &key, sizeof(int));
 	return 0;

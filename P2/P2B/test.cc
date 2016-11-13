@@ -117,7 +117,7 @@ void Tests::printBuffer(char *buffer, int s1, int s, int count) {
   char *ptr = buffer + s1;
   for (int i = 0; i < count; i++) {
     if (*ptr == 0) break;
-    cout << (int)(*ptr) << " ";
+    cout << *reinterpret_cast<int*>(ptr) << " ";
     ptr += s;
   }
   cout << endl << "### Print end" << endl;
