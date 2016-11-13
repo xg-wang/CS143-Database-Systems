@@ -305,8 +305,8 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 	int halfKeyPos = ((int)((getKeyCount() + 1) / 2))*keyPidSize + 4;
 	int preKey = -1;
 	int posKey = -1;
-	memcpy(&preKey, buffer + halfKeyPos - 8, sizeof(int));
-	memcpy(&posKey, buffer + halfKeyPos, sizeof(int));
+	preKey = *reinterpret_cast<int*>(buffer + halfKeyPos - 8);
+	posKey = *reinterpret_cast<int*>(buffer + halfKeyPos);
 
 	if(key < preKey){
 		//copy the (key, pid) pairs after prekey to the sibling
@@ -354,20 +354,20 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 {
 	char* temp = buffer + 4;
 	int key = 0;
-	memcpy(&key, temp, sizeof(int));
+	key = *reinterpret_cast<int*>(temp);
 	while(key != 0){
 		if(searchKey < key){
-			memcpy(&pid, temp - 4, sizeof(PageId));
+			pid = *reinterpret_cast<PageId*>(temp - 4);
 			return 0;
 		}
 		if(temp + keyPidSize < buffer + 1024){
 			temp += keyPidSize;
-			memcpy(&key, temp, sizeof(int));
+			key = *reinterpret_cast<int*>(temp);
 		}else{
 			break;
 		}
 	}
-	memcpy(&pid, temp + 4, sizeof(PageId));
+	pid = *reinterpret_cast<PageId*>(temp - 4);
 	return 0; 
 }
 
