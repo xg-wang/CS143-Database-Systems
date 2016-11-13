@@ -139,6 +139,8 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 	}
 	fill(midPos+size, buffer+PageFile::PAGE_SIZE-sizeof(PageId), 0);
 	siblingKey = (int)(*(sibling.buffer+sizeof(RecordId)));
+	// TODO: [TBD] set pid for next node here or in the BTIndex.
+	// setNextNodePtr();
 	return 0; 
 }
 
@@ -188,7 +190,11 @@ RC BTLeafNode::readEntry(int eid, int& key, RecordId& rid)
  * @return the PageId of the next sibling node 
  */
 PageId BTLeafNode::getNextNodePtr()
-{ return 0; }
+{ 
+	// NOTE: this is wrong when int value is larger than 1 Byte, use cast function
+	// return (PageId)*(buffer+PageFile::PAGE_SIZE-sizeof(PageId));
+	return *reinterpret_cast<PageId*>(buffer+PageFile::PAGE_SIZE-sizeof(PageId));
+}
 
 /*
  * Set the pid of the next slibling node.
@@ -196,7 +202,10 @@ PageId BTLeafNode::getNextNodePtr()
  * @return 0 if successful. Return an error code if there is an error.
  */
 RC BTLeafNode::setNextNodePtr(PageId pid)
-{ return 0; }
+{ 
+	*reinterpret_cast<PageId*>(buffer+PageFile::PAGE_SIZE-sizeof(PageId)) = pid;
+	return 0; 
+}
 
 
 

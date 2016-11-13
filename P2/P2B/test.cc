@@ -49,6 +49,10 @@ void Tests::testBTLeafNode() {
        << ", rid = [" << rid2.pid << ", " << rid2.sid << "]" 
        << endl; 
   
+  cout << "### Test get/set NextNodePtr" << endl;
+  node.setNextNodePtr(666);
+  cout << "node's next node ptr = " << node.getNextNodePtr() << endl;
+  
   cout << "### BT Leaf Node tests done" << endl;
 }
 
