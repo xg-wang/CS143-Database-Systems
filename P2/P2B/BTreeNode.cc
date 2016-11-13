@@ -55,21 +55,19 @@ RC BTLeafNode::write(PageId pid, PageFile& pf)
  */
 int BTLeafNode::getKeyCount()
 {
-	int numkeys = 0;
-	int size = sizeof(RecordId) + sizeof(int);
 	// binary search first key == 0
 	char *beg = buffer + sizeof(RecordId);
-	char *end = buffer + maxKeyCount*size + sizeof(RecordId);
+	char *end = buffer + (maxKeyCount-1)*size + sizeof(RecordId);
 	while (beg <= end) {
 		char *mid = beg + ((end - beg)/size >> 2) * size;
-		if (*mid != 0) {
+		if ((int)*mid != 0) {
 			beg = mid + size;
 		} else if (beg == mid) {
-			return 0;
-		} else if (*(mid-size) == 0) {
+			return (mid - buffer - sizeof(RecordId)) / size;
+		} else if ((int)*(mid-size) == 0) {
 			end = mid - size;
 		} else /*if (*(mid-size) == 0)*/ {
-			return (mid - beg) / size;
+			return (mid - buffer - sizeof(RecordId)) / size;
 		}
 	}
 	// incremental method
@@ -78,7 +76,7 @@ int BTLeafNode::getKeyCount()
 	// 		 pointer += size) {
 	// 	numkeys++;
 	// }
-	return numkeys; 
+	return (beg - buffer - sizeof(RecordId)) / size; 
 }
 
 /*
@@ -129,18 +127,19 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 															buffer + (keyCount-1)*size,
 															key,
 															sizeof(RecordId), size);
-  char *midPos = buffer + keyCount * size / 2;
+  char *midPos = buffer + keyCount / 2 * size ;
   if (pos <= midPos) {
 		memcpy(sibling.buffer, midPos, buffer+PageFile::PAGE_SIZE-sizeof(int)-midPos);
 		memmove(pos+size, pos, midPos-pos);
 		memcpy(pos, &rid, sizeof(RecordId));
 		memcpy(pos+sizeof(RecordId), &key, sizeof(int));
 	} else {
-		memcpy(sibling.buffer, midPos, pos - midPos);
-		memcpy(sibling.buffer+(pos-midPos), &rid, sizeof(RecordId));
-		memcpy(sibling.buffer+(pos-midPos)+sizeof(RecordId), &key, sizeof(int));
-		memcpy(sibling.buffer+(pos-midPos+size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
+		memcpy(sibling.buffer, midPos+size, pos-midPos+size);
+		memcpy(sibling.buffer+(pos-midPos+size), &rid, sizeof(RecordId));
+		memcpy(sibling.buffer+(pos-midPos+size)+sizeof(RecordId), &key, sizeof(int));
+		memcpy(sibling.buffer+(pos-midPos+2*size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
 	}
+	fill(midPos+size, buffer+PageFile::PAGE_SIZE-sizeof(PageId), 0);
 	siblingKey = (int)(*(sibling.buffer+sizeof(RecordId)));
 	return 0; 
 }
