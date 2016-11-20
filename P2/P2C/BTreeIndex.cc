@@ -33,8 +33,12 @@ RC BTreeIndex::open(const string& indexname, char mode)
   RC rc;
   // open the table file
   if ((rc = pf.open(indexname + ".idx", mode)) < 0) {
-      fprintf(stderr, "Error: index file %s open failed.\n", indexname.c_str());
-      return rc;
+    fprintf(stderr, "Error: index file %s open failed.\n", indexname.c_str());
+    return rc;
+  }
+  if (pf.endPid() != 0) {
+    rootPid = 0;
+    // TODO! get treeHeight here
   }
   return 0;
 }
@@ -48,9 +52,12 @@ RC BTreeIndex::close()
   RC rc;
   // open the table file
   if ((rc = pf.close()) < 0) {
-      fprintf(stderr, "Error: page file close failed.\n");
-      return rc;
+    fprintf(stderr, "Error: page file close failed.\n");
+    return rc;
   }
+  // cleanup
+  rootPid = -1;
+  treeHeight = 0;
   return 0;
 }
 
