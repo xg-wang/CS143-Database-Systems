@@ -9,6 +9,8 @@
  
 #include "BTreeIndex.h"
 #include "BTreeNode.h"
+#include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -58,7 +60,14 @@ RC BTreeIndex::open(const string& indexname, char mode)
 RC BTreeIndex::close()
 {
   RC rc;
-  // open the table file
+  char buffer[PageFile::PAGE_SIZE];
+  *reinterpret_cast<int*>(buffer) = rootPid;
+  *reinterpret_cast<int*>(buffer + sizeof(int)) = treeHeight;
+  if ((rc = pf.write(0, buffer)) < 0) {
+    fprintf(stderr, "Error: page file write leading data failed.\n");
+    return rc;
+  }
+  // close the table file
   if ((rc = pf.close()) < 0) {
     fprintf(stderr, "Error: page file close failed.\n");
     return rc;
@@ -77,6 +86,70 @@ RC BTreeIndex::close()
  */
 RC BTreeIndex::insert(int key, const RecordId& rid)
 {
+  RC rc;
+
+  if (key < 0) { return RC_INVALID_ATTRIBUTE; }
+
+  if (treeHeight == 0) {
+    BTLeafNode node;
+    node.insert(key, rid);
+    treeHeight = 1;
+    rootPid = (pf.endPid() == 0 ? 1 : pf.endPid());
+    return node.write(rootPid, pf); 
+  }
+
+  vector<unique_ptr<BTNonLeafNode>> nodePtrStack;
+  PageId pid = rootPid;
+  int currHeight = 1;
+  while (currHeight < treeHeight) {
+    nodePtrStack.emplace_back(new BTNonLeafNode());
+    nodePtrStack.back()->read(pid, pf);
+    nodePtrStack.back()->locateChildPtr(key, pid);
+    currHeight++; 
+  }
+  // deal with leaf node
+  BTLeafNode leaf;
+  leaf.read(pid, pf);
+  if (RC_NODE_FULL == leaf.insert(key, rid)) {
+    BTLeafNode sibling;
+    int siblingKey = -1;
+    PageId siblingPid = pf.endPid();
+    if ((rc = leaf.insertAndSplit(key, rid, sibling, siblingKey)) < 0) {
+      fprintf(stderr, "Error: insertAndSplit failed.\n");
+      return rc;
+    }
+    sibling.setNextNodePtr(leaf.getNextNodePtr());
+    leaf.setNextNodePtr(siblingPid);
+    // save updated sibling
+    if ((rc = sibling.write(siblingPid, pf)) < 0) {
+      fprintf(stderr, "Error: writing splited sibling leaf to page file failed.\n");
+      return rc;
+    }
+    // insert back the key to parents
+    while (nodePtrStack.size() > 0 && 
+           RC_NODE_FULL == nodePtrStack.back()->insert(siblingKey, siblingPid)) 
+    {
+      BTNonLeafNode currSibling;
+      int midKey = -1;
+      PageId currSiblingPid = pf.endPid();
+      if ((rc = nodePtrStack.back()->insertAndSplit(siblingKey, siblingPid, currSibling, midKey)) < 0) {
+        fprintf(stderr, "Error: writing splited sibling Nonleaf to page file failed.\n");
+        return rc;
+      }
+      // save changes
+      if ((rc = nodePtrStack.back()->write(nodePtrStack.back()->getPid(), pf)) < 0) {
+        fprintf(stderr, "Error: writing splited sibling leaf to page file failed.\n");
+        return rc;
+      }
+      // TODO!!!!!! working on here
+    }
+  }
+  // save updated leaf anyway
+  if ((rc = leaf.write(pid, pf)) < 0) {
+    fprintf(stderr, "Error: writing leaf to page file failed.\n");
+    return rc;
+  }
+
   return 0;
 }
 

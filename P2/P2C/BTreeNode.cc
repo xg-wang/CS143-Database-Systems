@@ -37,6 +37,7 @@ BTLeafNode::BTLeafNode()
  */
 RC BTLeafNode::read(PageId pid, const PageFile& pf)
 {
+	nodePid = pid;
 	return pf.read(pid, buffer);
 }
     
@@ -223,6 +224,7 @@ BTNonLeafNode::BTNonLeafNode()
  */
 RC BTNonLeafNode::read(PageId pid, const PageFile& pf)
 { 
+	nodePid = pid;	
 	return pf.read(pid, buffer); 
 }
     

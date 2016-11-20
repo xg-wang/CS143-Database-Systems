@@ -103,6 +103,8 @@ class BTLeafNode {
     */
     RC write(PageId pid, PageFile& pf);
 
+    PageId getPid() {return nodePid;};
+
   private:
    /**
     * The main memory buffer for loading the content of the disk page 
@@ -111,6 +113,7 @@ class BTLeafNode {
     char buffer[PageFile::PAGE_SIZE];
     int maxKeyCount;
     int size;
+    PageId nodePid;
 }; 
 
 
@@ -190,6 +193,8 @@ class BTNonLeafNode {
     */
     RC write(PageId pid, PageFile& pf);
 
+    PageId getPid() {return nodePid;};
+    
     void print(RC error);
 
   private:
@@ -200,6 +205,7 @@ class BTNonLeafNode {
     char buffer[PageFile::PAGE_SIZE];
     int maxKeyCount;
     int keyPidSize;
+    PageId nodePid;
 }; 
 
 #endif /* BTREENODE_H */
