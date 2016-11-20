@@ -98,7 +98,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     return node.write(rootPid, pf); 
   }
 
-  vector<unique_ptr<BTNonLeafNode>> nodePtrStack;
+  vector<unique_ptr<BTNonLeafNode> > nodePtrStack;
   PageId pid = rootPid;
   int currHeight = 1;
   while (currHeight < treeHeight) {
@@ -191,7 +191,29 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
  */
 RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
 {
-  return 0;
+    BTLeafNode leaf;
+    BTNonLeafNode node;
+    int currHeight = treeHeight;
+    RC error;
+    PageId nextPid = rootPid;
+
+    while(currHeight != 1){
+        if((error = node.read(rootPid, pf)) != 0){
+            return error;
+        }
+        if((error = node.locateChildPtr(searchKey, nextPid)) != 0){
+            return error;
+        }
+        currHeight--;
+    }
+    if((error = leaf.read(rootPid, pf)) != 0){
+            return error;
+    }
+    if((error = leaf.locate(searchKey, cursor.eid)) != 0){
+            return error;
+    }
+    cursor.pid = nextPid;
+    return 0;
 }
 
 /*
@@ -204,5 +226,26 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
  */
 RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 {
-  return 0;
+    BTLeafNode leaf;
+    RC error;
+    if(cursor.pid < 0){
+        return RC_INVALID_CURSOR;
+    }
+    
+    if((error = leaf.read(cursor.pid, pf) != 0)){
+        return error;
+    }
+    // locate the (key, rid) pair by cursor.eid
+    if((error = leaf.readEntry(cursor.eid, key, rid) != 0)){
+        return error;
+    }
+
+    if(cursor.eid < leaf.getKeyCount()){
+        cursor.eid++;
+    }else{
+        cursor.eid = 0;
+        cursor.pid = leaf.getNextNodePtr();
+    }
+
+    return 0;
 }
