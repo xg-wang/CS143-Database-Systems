@@ -32,6 +32,7 @@ typedef struct {
  * 
  */
 class BTreeIndex {
+  friend class Tests;
  public:
   BTreeIndex();
   ~BTreeIndex() { close(); }

@@ -1,6 +1,9 @@
 #include "test.h"
 #include "BTreeNode.h"
+#include "BTreeIndex.h"
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
 void Tests::runTests() {
@@ -9,7 +12,14 @@ void Tests::runTests() {
   cout << endl;
   cout << "***********************************************************************" << endl;
   cout << endl;
+  
   testBTNonLeafNode();
+  cout << "### BTNonLeafNode tests done" << endl;
+  cout << endl;
+  cout << "***********************************************************************" << endl;
+  cout << endl;
+
+  testBTIndex();
   cout << "### BTNonLeafNode tests done" << endl;
 }
 
@@ -121,4 +131,23 @@ void Tests::printBuffer(char *buffer, int s1, int s, int count) {
     ptr += s;
   }
   cout << endl << "### Print end" << endl;
+}
+
+void Tests::testBTIndex() {
+  BTreeIndex idx;
+  // --- test insert part
+  idx.open("test", 'w');
+  RecordId rid;
+  rid.pid = 1; rid.sid = 1;
+  vector<int> testKeys = {2, 3, 5, 7, 8, 9};
+  for (auto k: testKeys) {
+    idx.insert(k, rid);
+  }
+  cout << "### insert keys: {2, 3, 5, 7, 8, 9}" << endl;
+  cout << "### rootPid = " << idx.rootPid 
+       << ", treeHeight = " << idx.treeHeight 
+       << endl;
+
+  // --- test locate & read part
+
 }
