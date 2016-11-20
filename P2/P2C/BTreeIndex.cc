@@ -126,6 +126,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
       return rc;
     }
     // insert back the key to parents
+    PageId pid1; // for root init
     while (nodePtrStack.size() > 0 && 
            RC_NODE_FULL == nodePtrStack.back()->insert(siblingKey, siblingPid)) 
     {
@@ -133,17 +134,34 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
       int midKey = -1;
       PageId currSiblingPid = pf.endPid();
       if ((rc = nodePtrStack.back()->insertAndSplit(siblingKey, siblingPid, currSibling, midKey)) < 0) {
-        fprintf(stderr, "Error: writing splited sibling Nonleaf to page file failed.\n");
+        fprintf(stderr, "Error: insertAndSplit Nonleaf failed.\n");
         return rc;
       }
       // save changes
-      if ((rc = nodePtrStack.back()->write(nodePtrStack.back()->getPid(), pf)) < 0) {
-        fprintf(stderr, "Error: writing splited sibling leaf to page file failed.\n");
+      if ((rc = nodePtrStack.back()->write(nodePtrStack.back()->getPid(), pf)) < 0 ||
+          (rc = currSibling.write(currSiblingPid, pf)) < 0) 
+      {
+        fprintf(stderr, "Error: writing to page file failed.\n");
         return rc;
       }
-      // TODO!!!!!! working on here
+      // update node info for next insertion
+      siblingKey = midKey;
+      siblingPid = currSiblingPid;
+      pid1 = nodePtrStack.back()->getPid(); 
+      nodePtrStack.pop_back();
     }
-  }
+    // if we need a new root
+    if (nodePtrStack.size() < 1) {
+      BTNonLeafNode newRoot;
+      newRoot.initializeRoot(pid1, siblingKey, siblingPid);
+      if ((rc = newRoot.write(pf.endPid(), pf)) < 0) {
+        fprintf(stderr, "Error: writing leaf to page file failed.\n");
+        return rc;
+      }
+      rootPid = pf.endPid();
+      treeHeight++;
+    }
+  } // if (RC_NODE_FULL == leaf.insert(key, rid))
   // save updated leaf anyway
   if ((rc = leaf.write(pid, pf)) < 0) {
     fprintf(stderr, "Error: writing leaf to page file failed.\n");
