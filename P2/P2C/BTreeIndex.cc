@@ -37,8 +37,16 @@ RC BTreeIndex::open(const string& indexname, char mode)
     return rc;
   }
   if (pf.endPid() != 0) {
-    rootPid = 0;
-    // TODO! get treeHeight here
+    char buffer[PageFile::PAGE_SIZE];
+    if ((rc = pf.read(0, buffer)) < 0) {
+      fprintf(stderr, "Error: page file read initial data failed.\n");
+      return rc;
+    }
+    rootPid = *reinterpret_cast<int*>(buffer);
+    treeHeight = *reinterpret_cast<int*>(buffer + sizeof(int));
+  } else {
+    rootPid = -1;
+    treeHeight = 0;
   }
   return 0;
 }
