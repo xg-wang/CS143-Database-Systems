@@ -278,12 +278,12 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	if(keyCount == maxKeyCount){
 		return RC_NODE_FULL;
 	}
-	char* pos = binarySearchKey(buffer, buffer + (keyCount - 1)*keyPidSize, 
+	char* pos = binarySearchKey(buffer, buffer + (keyCount - 1)*keyPidSize + 4, 
 								key, sizeof(PageId), keyPidSize);
 	// move back one keyPidSize from pos to the last pageid 
 	memmove(pos + keyPidSize, pos, buffer + keyCount*keyPidSize - pos);
-	memcpy(pos, &pid, sizeof(PageId));
-	memcpy(pos + sizeof(PageId), &key, sizeof(int));
+	memcpy(pos, &key, sizeof(int));
+	memcpy(pos + sizeof(int), &pid, sizeof(PageId));
 	return 0;
 }
 
@@ -386,8 +386,8 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
 { 
 	//std::fill(buffer, buffer + PageFile::PAGE_SIZE, 0);
-	memcpy(buffer + 8, &pid2, sizeof(PageId));
-	RC error = insert(key, pid1); //insert (pid, key) pair
+	memcpy(buffer, &pid1, sizeof(PageId));
+	RC error = insert(key, pid2); //insert (key, pid) pair
 	if(error != 0){
 		return error;
 	}
