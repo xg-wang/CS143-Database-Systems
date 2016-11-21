@@ -357,21 +357,20 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 {
 	char* temp = buffer + 4;
-	int key = 0;
-	key = *reinterpret_cast<int*>(temp);
+	int key = *reinterpret_cast<int*>(temp);
 	while(key != 0){
 		if(searchKey < key){
 			pid = *reinterpret_cast<PageId*>(temp - 4);
 			return 0;
 		}
-		if(temp + keyPidSize < buffer + 1024){
-			temp += keyPidSize;
-			key = *reinterpret_cast<int*>(temp);
+		if(temp + keyPidSize < buffer + 1020){
+			key = *reinterpret_cast<int*>(temp + keyPidSize);
+			if(key != 0)	temp += keyPidSize;
 		}else{
 			break;
 		}
 	}
-	pid = *reinterpret_cast<PageId*>(temp - 4);
+	pid = *reinterpret_cast<PageId*>(temp + 4);
 	return 0; 
 }
 
@@ -385,7 +384,7 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
 RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
 { 
 	//std::fill(buffer, buffer + PageFile::PAGE_SIZE, 0);
-	memcpy(buffer, &pid2, sizeof(PageId));
+	memcpy(buffer + 8, &pid2, sizeof(PageId));
 	RC error = insert(key, pid1); //insert (pid, key) pair
 	if(error != 0){
 		return error;

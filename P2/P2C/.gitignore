@@ -6,3 +6,4 @@ lex.sql.c
 SqlParser.tab.c 
 SqlParser.tab.h
 *.dSYM 
+test.idx

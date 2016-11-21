@@ -7,17 +7,17 @@
 using namespace std;
 
 void Tests::runTests() {
-  testBTLeafNode();
-  cout << "### BTLeafNode tests done" << endl;
-  cout << endl;
-  cout << "***********************************************************************" << endl;
-  cout << endl;
+  // testBTLeafNode();
+  // cout << "### BTLeafNode tests done" << endl;
+  // cout << endl;
+  // cout << "***********************************************************************" << endl;
+  // cout << endl;
   
-  testBTNonLeafNode();
-  cout << "### BTNonLeafNode tests done" << endl;
-  cout << endl;
-  cout << "***********************************************************************" << endl;
-  cout << endl;
+  // testBTNonLeafNode();
+  // cout << "### BTNonLeafNode tests done" << endl;
+  // cout << endl;
+  // cout << "***********************************************************************" << endl;
+  // cout << endl;
 
   testBTIndex();
   cout << "### BTNonLeafNode tests done" << endl;
@@ -149,15 +149,15 @@ void Tests::testBTIndex() {
        << endl;
 
   // --- test locate & read part
-  int key;
-  RecordId getrid;
-  IndexCursor cursor;
-  idx.locate(3, cursor);
-  idx.readForward(cursor, key, getrid);
-  cout << "searchKey pid = " << cursor.pid
-       << ", eid = " << cursor.eid
-       << endl;
-  cout << "pid = " << getrid.pid
-       << ", sid = " << getrid.sid
-       << endl;
+  // int key;
+  // RecordId getrid;
+  // IndexCursor cursor;
+  // idx.locate(3, cursor);
+  // idx.readForward(cursor, key, getrid);
+  // cout << "searchKey pid = " << cursor.pid
+  //      << ", eid = " << cursor.eid
+  //      << endl;
+  // cout << "pid = " << getrid.pid
+  //      << ", sid = " << getrid.sid
+  //      << endl;
 }
