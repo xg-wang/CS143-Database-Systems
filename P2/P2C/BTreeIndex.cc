@@ -11,6 +11,8 @@
 #include "BTreeNode.h"
 #include <vector>
 #include <memory>
+#include <iostream>
+#define DEBUG_PRINT
 
 using namespace std;
 
@@ -126,10 +128,15 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
       return rc;
     }
     // insert back the key to parents
-    PageId pid1; // for root init
-    while (nodePtrStack.size() > 0 && 
-           RC_NODE_FULL == nodePtrStack.back()->insert(siblingKey, siblingPid)) 
-    {
+    PageId pid1 = 1; // for root init
+    while (nodePtrStack.size() > 0) {
+      if (RC_NODE_FULL != nodePtrStack.back()->insert(siblingKey, siblingPid)) {
+        if ((rc = nodePtrStack.back()->write(nodePtrStack.back()->getPid(), pf)) < 0) {
+          fprintf(stderr, "Error: writing to page file failed.\n");
+          return rc;
+        }
+        break;
+      }
       BTNonLeafNode currSibling;
       int midKey = -1;
       PageId currSiblingPid = pf.endPid();
@@ -152,13 +159,17 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     }
     // if we need a new root
     if (nodePtrStack.size() < 1) {
+      #ifdef DEBUG_PRINT
+      cout << "### NEW ROOT GENERATED when key = " << key << " ###" << endl;
+      cout << "pid1 = " << pid1 << "; siblingkey = " << siblingKey << "; siblingPid = " << siblingPid << endl;
+      #endif
       BTNonLeafNode newRoot;
       newRoot.initializeRoot(pid1, siblingKey, siblingPid);
       if ((rc = newRoot.write(pf.endPid(), pf)) < 0) {
         fprintf(stderr, "Error: writing leaf to page file failed.\n");
         return rc;
       }
-      rootPid = pf.endPid();
+      rootPid = pf.endPid() - 1;
       treeHeight++;
     }
   } // if (RC_NODE_FULL == leaf.insert(key, rid))

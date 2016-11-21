@@ -139,11 +139,11 @@ void Tests::testBTIndex() {
   idx.open("test", 'w');
   RecordId rid;
   rid.pid = 1; rid.sid = 1;
-  vector<int> testKeys = {2, 3, 5, 7, 8, 9};
-  for (auto k: testKeys) {
+  // 86, 5590, 360512 (+1)
+  for (int k = 1; k < 360513/*55557*/; k++) {
     idx.insert(k, rid);
   }
-  cout << "### insert keys: {2, 3, 5, 7, 8, 9}" << endl;
+  cout << "### insert keys" << endl;
   cout << "### rootPid = " << idx.rootPid 
        << ", treeHeight = " << idx.treeHeight 
        << endl;

@@ -342,6 +342,8 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		//copy the key value to midkey which will be push to the parent later
 		midKey = key;
 	}
+	
+	cout << "NonLeafNode split, key = " << key << ", midKey = " << midKey << endl;
 	return 0; 
 }
 
