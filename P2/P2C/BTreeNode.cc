@@ -278,10 +278,10 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	if(keyCount == maxKeyCount){
 		return RC_NODE_FULL;
 	}
-	char* pos = binarySearchKey(buffer, buffer + (keyCount - 1)*keyPidSize + 4, 
-								key, sizeof(PageId), keyPidSize);
+	char* pos = binarySearchKey(buffer, buffer + (keyCount - 1)*keyPidSize, 
+								key, sizeof(PageId), keyPidSize) + sizeof(PageId);
 	// move back one keyPidSize from pos to the last pageid 
-	memmove(pos + keyPidSize, pos, buffer + keyCount*keyPidSize - pos);
+	memmove(pos + keyPidSize, pos, buffer + sizeof(PageId) + keyCount*keyPidSize - pos);
 	memcpy(pos, &key, sizeof(int));
 	memcpy(pos + sizeof(int), &pid, sizeof(PageId));
 	return 0;
