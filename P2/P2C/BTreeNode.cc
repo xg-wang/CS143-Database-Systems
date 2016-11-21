@@ -85,8 +85,7 @@ int BTLeafNode::getKeyCount()
 RC BTLeafNode::insert(int key, const RecordId& rid)
 { 
 	int keyCount = getKeyCount();
-	int size = sizeof(RecordId) + sizeof(int);
-	if (keyCount * size >= PageFile::PAGE_SIZE-sizeof(PageId)) {
+	if (keyCount >= maxKeyCount) {
 		return RC_NODE_FULL;
 	}
 	char *pos = binarySearchKey(buffer,
@@ -128,15 +127,18 @@ RC BTLeafNode::insertAndSplit(int key, const RecordId& rid,
 		memcpy(pos, &rid, sizeof(RecordId));
 		memcpy(pos+sizeof(RecordId), &key, sizeof(int));
 	} else {
-		memcpy(sibling.buffer, midPos+size, pos-midPos+size);
-		memcpy(sibling.buffer+(pos-midPos+size), &rid, sizeof(RecordId));
-		memcpy(sibling.buffer+(pos-midPos+size)+sizeof(RecordId), &key, sizeof(int));
-		memcpy(sibling.buffer+(pos-midPos+2*size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
+		// ## error comes from here !
+		// memcpy(sibling.buffer, midPos+size, pos-midPos+size);
+		// memcpy(sibling.buffer+(pos-midPos+size), &rid, sizeof(RecordId));
+		// memcpy(sibling.buffer+(pos-midPos+size)+sizeof(RecordId), &key, sizeof(int));
+		// memcpy(sibling.buffer+(pos-midPos+2*size), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
+		memcpy(sibling.buffer, midPos+size, pos-midPos-size);
+		memcpy(sibling.buffer+(pos-midPos-size), &rid, sizeof(RecordId));
+		memcpy(sibling.buffer+(pos-midPos-size)+sizeof(RecordId), &key, sizeof(int));
+		memcpy(sibling.buffer+(pos-midPos), pos, buffer+PageFile::PAGE_SIZE-sizeof(int)-pos);
 	}
 	fill(midPos+size, buffer+PageFile::PAGE_SIZE-sizeof(PageId), 0);
 	siblingKey = *reinterpret_cast<int*>(sibling.buffer+sizeof(RecordId));
-	// TODO: [TBD] set pid for next node here or in the BTIndex.
-	// setNextNodePtr();
 	return 0; 
 }
 

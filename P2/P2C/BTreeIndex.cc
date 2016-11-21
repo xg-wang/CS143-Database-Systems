@@ -107,15 +107,14 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     nodePtrStack.emplace_back(new BTNonLeafNode());
     nodePtrStack.back()->read(pid, pf);
     nodePtrStack.back()->locateChildPtr(key, pid);
-    // if (key == 7438) {
-    //   cout << "currHeight: " << currHeight << ", pid: " << pid << endl;
-    // }
     currHeight++; 
   }
   // deal with leaf node
   BTLeafNode leaf;
   leaf.read(pid, pf);
   if (RC_NODE_FULL == leaf.insert(key, rid)) {
+    cout << "Leaf node full when key = " << key << ", pid = " << pid << endl;
+    // cout << "leaf maxPid = " << leaf.maxKeyCount << endl;
     BTLeafNode sibling;
     int siblingKey = -1;
     PageId siblingPid = pf.endPid();
