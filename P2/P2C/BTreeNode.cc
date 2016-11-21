@@ -11,7 +11,7 @@ char* binarySearchKey(char *beg, char *end, int key, int step1, int size)
 	end += step1;
 	while (beg <= end) {
 		char *mid = beg + ((end - beg)/size >> 1) * size;
-		if (*reinterpret_cast<int*>(mid) > key || *mid == 0) {
+		if (*reinterpret_cast<int*>(mid) > key) {
 			end = mid - size;
 		} else if (*reinterpret_cast<int*>(mid) < key) {
 			beg = mid + size;
@@ -284,6 +284,9 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	memmove(pos + keyPidSize, pos, buffer + sizeof(PageId) + keyCount*keyPidSize - pos);
 	memcpy(pos, &key, sizeof(int));
 	memcpy(pos + sizeof(int), &pid, sizeof(PageId));
+	/*cout << *(int*)(buffer) << " " << *(int*)(buffer + 4) << " " << *(int*)(buffer + 8)
+	     << " " << *(int*)(buffer + 12) << " " << *(int*)(buffer + 16) << " " << *(int*)(buffer + 20)
+		<< " " << *(int*)(buffer + 24) << endl;*/
 	return 0;
 }
 
