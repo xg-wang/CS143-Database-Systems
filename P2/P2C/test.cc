@@ -7,17 +7,17 @@
 using namespace std;
 
 void Tests::runTests() {
-  // testBTLeafNode();
-  // cout << "### BTLeafNode tests done" << endl;
-  // cout << endl;
-  // cout << "***********************************************************************" << endl;
-  // cout << endl;
+  testBTLeafNode();
+  cout << "### BTLeafNode tests done" << endl;
+  cout << endl;
+  cout << "***********************************************************************" << endl;
+  cout << endl;
   
-  // testBTNonLeafNode();
-  // cout << "### BTNonLeafNode tests done" << endl;
-  // cout << endl;
-  // cout << "***********************************************************************" << endl;
-  // cout << endl;
+  testBTNonLeafNode();
+  cout << "### BTNonLeafNode tests done" << endl;
+  cout << endl;
+  cout << "***********************************************************************" << endl;
+  cout << endl;
 
   testBTIndex();
   cout << "### BTNonLeafNode tests done" << endl;
@@ -110,18 +110,6 @@ void Tests::testBTNonLeafNode(){
   cout << "childPid = " << childPid << endl;
 }
 
-/*void Tests::printBuffer(char *buffer, int s1, int s, int count) {
-  cout << "### Print buffer: " << endl;
-  char *ptr = buffer;
-  for (int i = 0; i < count + 1; i++) {
-    //if (*ptr == 0) break;
-    cout << (PageId)(*ptr) << " ";
-    cout << (int)(*(ptr+sizeof(PageId))) << " ";
-    ptr += s;
-  }
-  cout << endl << "### Print end" << endl;
-}*/
-
 void Tests::printBuffer(char *buffer, int s1, int s, int count) {
   cout << "### Print buffer: " << endl;
   char *ptr = buffer + s1;
@@ -140,7 +128,8 @@ void Tests::testBTIndex() {
   RecordId rid;
   rid.pid = 1; rid.sid = 1;
   // 86, 5590, 360512 (+1)
-  for (int k = 1; k < 360513/*55557*/; k++) {
+  // for (int k = 1; k < 360513/*55557*/; k++) {
+  for (int k = 5590; k >0; k--) {
     idx.insert(k, rid);
   }
   cout << "### insert keys" << endl;
@@ -149,15 +138,15 @@ void Tests::testBTIndex() {
        << endl;
 
   // --- test locate & read part
-  // int key;
-  // RecordId getrid;
-  // IndexCursor cursor;
-  // idx.locate(3, cursor);
-  // idx.readForward(cursor, key, getrid);
-  // cout << "searchKey pid = " << cursor.pid
-  //      << ", eid = " << cursor.eid
-  //      << endl;
-  // cout << "pid = " << getrid.pid
-  //      << ", sid = " << getrid.sid
-  //      << endl;
+  int key;
+  RecordId getrid;
+  IndexCursor cursor;
+  idx.locate(3, cursor);
+  idx.readForward(cursor, key, getrid);
+  cout << "searchKey pid = " << cursor.pid
+       << ", eid = " << cursor.eid
+       << endl;
+  cout << "pid = " << getrid.pid
+       << ", sid = " << getrid.sid
+       << endl;
 }

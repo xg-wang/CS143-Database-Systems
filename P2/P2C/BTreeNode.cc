@@ -284,9 +284,6 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 	memmove(pos + keyPidSize, pos, buffer + sizeof(PageId) + keyCount*keyPidSize - pos);
 	memcpy(pos, &key, sizeof(int));
 	memcpy(pos + sizeof(int), &pid, sizeof(PageId));
-	/*cout << *(int*)(buffer) << " " << *(int*)(buffer + 4) << " " << *(int*)(buffer + 8)
-	     << " " << *(int*)(buffer + 12) << " " << *(int*)(buffer + 16) << " " << *(int*)(buffer + 20)
-		<< " " << *(int*)(buffer + 24) << endl;*/
 	return 0;
 }
 
@@ -348,7 +345,6 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		midKey = key;
 	}
 	
-	cout << "NonLeafNode split, key = " << key << ", midKey = " << midKey << endl;
 	return 0; 
 }
 

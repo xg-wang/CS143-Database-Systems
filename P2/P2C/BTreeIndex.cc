@@ -11,8 +11,6 @@
 #include "BTreeNode.h"
 #include <vector>
 #include <memory>
-#include <iostream>
-#define DEBUG_PRINT
 
 using namespace std;
 
@@ -113,8 +111,6 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
   BTLeafNode leaf;
   leaf.read(pid, pf);
   if (RC_NODE_FULL == leaf.insert(key, rid)) {
-    cout << "Leaf node full when key = " << key << ", pid = " << pid << endl;
-    // cout << "leaf maxPid = " << leaf.maxKeyCount << endl;
     BTLeafNode sibling;
     int siblingKey = -1;
     PageId siblingPid = pf.endPid();
@@ -161,10 +157,6 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     }
     // if we need a new root
     if (nodePtrStack.size() < 1) {
-      #ifdef DEBUG_PRINT
-      cout << "### NEW ROOT GENERATED when key = " << key << " ###" << endl;
-      cout << "pid1 = " << pid1 << "; siblingkey = " << siblingKey << "; siblingPid = " << siblingPid << endl;
-      #endif
       BTNonLeafNode newRoot;
       newRoot.initializeRoot(pid1, siblingKey, siblingPid);
       if ((rc = newRoot.write(pf.endPid(), pf)) < 0) {
