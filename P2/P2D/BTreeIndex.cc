@@ -21,6 +21,11 @@ BTreeIndex::BTreeIndex()
 {
   rootPid = -1;
   treeHeight = 0;
+  pfOpen = false;
+}
+BTreeIndex::~BTreeIndex()
+{
+  if (pfOpen) close();
 }
 
 /*
@@ -50,6 +55,7 @@ RC BTreeIndex::open(const string& indexname, char mode)
     rootPid = -1;
     treeHeight = 0;
   }
+  pfOpen = true;
   return 0;
 }
 
@@ -75,6 +81,7 @@ RC BTreeIndex::close()
   // cleanup
   rootPid = -1;
   treeHeight = 0;
+  pfOpen = false;
   return 0;
 }
 

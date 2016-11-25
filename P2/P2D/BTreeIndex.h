@@ -35,7 +35,7 @@ class BTreeIndex {
   friend class Tests;
  public:
   BTreeIndex();
-  ~BTreeIndex() { close(); }
+  ~BTreeIndex();
 
   /**
    * Open the index file in read or write mode.
@@ -92,6 +92,7 @@ class BTreeIndex {
   
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
+  bool     pfOpen;
 
   PageId   rootPid;    /// the PageId of the root node
   int      treeHeight; /// the height of the tree
