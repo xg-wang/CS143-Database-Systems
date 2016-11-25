@@ -296,6 +296,7 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
   fstream     lf;
   RecordFile  rf;
   RecordId    rid;
+  BTreeIndex  idx;
   BTNonLeafNode node;
   BTNonLeafNode sibling;
   RC      rc;
@@ -311,6 +312,11 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
     fprintf(stderr, "Error: table %s does not exist\n", table.c_str());
     return rc;
   }
+  // open index file if needed
+  if (index && (rc = idx.open(table, 'w') < 0)) {
+    fprintf(stderr, "Error: index file %s open failed\n", table.c_str());
+    return rc;
+  }
   
   // parse each line
   string line, value;
@@ -321,10 +327,12 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
       return rc;
     }
     rf.append(key, value, rid);
+    if (index) idx.insert(key, rid);
   }
   // finish loading, close all files
   rf.close();
   lf.close();
+  idx.close();
 
   return 0;
 }
