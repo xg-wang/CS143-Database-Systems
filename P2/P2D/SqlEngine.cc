@@ -315,26 +315,13 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
   // parse each line
   string line, value;
   int key;
-  /*
-  RC error1, error2;
-  PageId pid;
-  int midKey;
-  int i = 100;
-  */
   while (getline(lf, line)) {
     if ((rc = SqlEngine::parseLoadLine(line, key, value)) < 0) {
       fprintf(stderr, "Error: loadfile parse error, line: %s\n", line.c_str());
       return rc;
     }
     rf.append(key, value, rid);
-    //if(i < 227) error1 = node.insert(key, i++);
-    //else  error2 = node.insertAndSplit(key, i++, sibling, midKey);
   }
-  //node.locateChildPtr(50, pid);
-  //cout << "locate child ptr: " << pid << endl;
-  //node.initializeRoot(100, 1, 101);
-  //node.print(error1);
-  //sibling.print(error2);
   // finish loading, close all files
   rf.close();
   lf.close();
