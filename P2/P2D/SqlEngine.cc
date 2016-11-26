@@ -339,7 +339,7 @@ RC SqlEngine::load(const string& table, const string& loadfile, bool index)
   // finish loading, close all files
   rf.close();
   lf.close();
-  idx.close();
+  if (index) idx.close();
 
   return 0;
 }
