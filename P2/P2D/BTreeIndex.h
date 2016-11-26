@@ -93,6 +93,7 @@ class BTreeIndex {
  private:
   PageFile pf;         /// the PageFile used to store the actual b+tree in disk
   bool     pfOpen;
+  bool     needWrite;
 
   PageId   rootPid;    /// the PageId of the root node
   int      treeHeight; /// the height of the tree

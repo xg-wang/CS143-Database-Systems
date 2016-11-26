@@ -56,6 +56,7 @@ RC BTreeIndex::open(const string& indexname, char mode)
     treeHeight = 0;
   }
   pfOpen = true;
+  needWrite = mode == 'w';
   return 0;
 }
 
@@ -66,12 +67,14 @@ RC BTreeIndex::open(const string& indexname, char mode)
 RC BTreeIndex::close()
 {
   RC rc;
-  char buffer[PageFile::PAGE_SIZE];
-  *reinterpret_cast<int*>(buffer) = rootPid;
-  *reinterpret_cast<int*>(buffer + sizeof(int)) = treeHeight;
-  if ((rc = pf.write(0, buffer)) < 0) {
-    fprintf(stderr, "Error: page file write leading data failed.\n");
-    return rc;
+  if (needWrite) {
+    char buffer[PageFile::PAGE_SIZE];
+    *reinterpret_cast<int*>(buffer) = rootPid;
+    *reinterpret_cast<int*>(buffer + sizeof(int)) = treeHeight;
+    if ((rc = pf.write(0, buffer)) < 0) {
+      fprintf(stderr, "Error: page file write leading data failed.\n");
+      return rc;
+    }
   }
   // close the table file
   if ((rc = pf.close()) < 0) {
