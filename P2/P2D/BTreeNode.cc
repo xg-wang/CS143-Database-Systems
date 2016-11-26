@@ -1,6 +1,6 @@
 #include "BTreeNode.h"
 #include <iostream>
-
+#include <cstring>
 using namespace std;
 
 // Utils

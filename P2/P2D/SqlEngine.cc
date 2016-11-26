@@ -67,10 +67,12 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     SelCond temp = cond[i];
     
     if(temp.attr == 1){
+      cout << "keyCondition:" << endl;
       keyHasCond = true;
       int tempValue = atoi(temp.value);   // get the key need to be compared later
       if(temp.comp == SelCond::EQ){
         keyEq = tempValue;
+        fprintf(stdout, "tempValue : %d\n", tempValue);
         break;
       }else if(temp.comp == SelCond::LT){
         if(Smaller == -1 || tempValue < Smaller){
@@ -101,8 +103,9 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       }
     }
   }
+  /*
   // if index exsits and no conditions for both key and value attribute and count(*)
-  if(index.open(table + ".idx", 'r') == 0 && !keyHasCond && !valueHasCond && attr == 4){
+  if(index.open(table, 'r') == 0 && !keyHasCond && !valueHasCond && attr == 4){
     rid.pid = rid.sid = 0;
     count = 0;
     index.locate(0, idxCursor);
@@ -110,11 +113,12 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       count++;
     }
     goto end_select;
-  }
+  }*/
 
   // if there exists any conditions on the key attribute, go for the index
   // else use the normal select
-  if(index.open(table + ".idx", 'r') != 0 || !keyHasCond){
+  if(index.open(table, 'r') != 0 || !keyHasCond || attr == 4){
+    cout << "SELECT without INDEX!!!!" << endl;
     // scan the table file from the beginning
     rid.pid = rid.sid = 0;
     count = 0;
@@ -182,6 +186,8 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       ++rid;
     }
   }else{  // it must exits conditions on key attribute
+    cout << "SELECT with INDEX!!!!" << endl;
+    fprintf(stdout, "keyEq: %d, valueEq: %s\n", keyEq, valueEq.c_str());
     rid.pid = rid.sid = 0;
     count = 0;
 
@@ -228,6 +234,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
         // skip the tuple if any condition is not met
         switch (cond[i].comp) {
         case SelCond::EQ:
+          fprintf(stdout, "key : %d, diff: %d\n", key, diff);
           if (diff != 0){
             if(cond[i].attr == 1) goto end_select;
             goto while_continue;
