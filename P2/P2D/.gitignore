@@ -7,3 +7,13 @@ SqlParser.tab.c
 SqlParser.tab.h
 *.dSYM 
 test.idx
+large.idx
+large.tbl
+medium.idx
+medium.tbl
+small.idx
+small.tbl
+xlarge.idx
+xlarge.tbl
+xsmall.idx
+xsmall.tbl
