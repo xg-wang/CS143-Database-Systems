@@ -221,7 +221,7 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
         }
         currHeight--;
     }
-    if((error = leaf.read(rootPid, pf)) != 0){
+    if((error = leaf.read(nextPid, pf)) != 0){
             return error;
     }
     if((error = leaf.locate(searchKey, cursor.eid)) != 0){
