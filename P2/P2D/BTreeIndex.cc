@@ -213,7 +213,7 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
     PageId nextPid = rootPid;
 
     while(currHeight != 1){
-        if((error = node.read(rootPid, pf)) != 0){
+        if((error = node.read(nextPid, pf)) != 0){
             return error;
         }
         if((error = node.locateChildPtr(searchKey, nextPid)) != 0){
