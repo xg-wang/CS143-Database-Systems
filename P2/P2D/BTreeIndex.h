@@ -45,6 +45,7 @@ class BTreeIndex {
    * @return error code. 0 if no error
    */
   RC open(const std::string& indexname, char mode);
+  bool isOpen() { return pfOpen; };
 
   /**
    * Close the index file.
