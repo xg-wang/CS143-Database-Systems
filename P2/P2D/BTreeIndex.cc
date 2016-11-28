@@ -241,25 +241,25 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
  */
 RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 {
-    BTLeafNode leaf;
     RC error;
     if(cursor.pid < 0){
         return RC_INVALID_CURSOR;
     }
-    
-    if((error = leaf.read(cursor.pid, pf) != 0)){
+
+    if(cacheLeaf.getPid() != cursor.pid && 
+       (error = cacheLeaf.read(cursor.pid, pf) != 0)){
         return error;
     }
     // locate the (key, rid) pair by cursor.eid
-    if((error = leaf.readEntry(cursor.eid, key, rid) != 0)){
+    if((error = cacheLeaf.readEntry(cursor.eid, key, rid) != 0)){
         return error;
     }
 
-    if(cursor.eid < leaf.getKeyCount()){
+    if(cursor.eid < cacheLeaf.getKeyCount()){
         cursor.eid++;
     }else{
         cursor.eid = 0;
-        cursor.pid = leaf.getNextNodePtr();
+        cursor.pid = cacheLeaf.getNextNodePtr();
     }
     if(cursor.pid == 0) return RC_END_OF_TREE;
     return 0;
