@@ -255,7 +255,7 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
         return error;
     }
 
-    if(cursor.eid < cacheLeaf.getKeyCount()){
+    if(cursor.eid < cacheLeaf.getKeyCount()-1){
         cursor.eid++;
     }else{
         cursor.eid = 0;

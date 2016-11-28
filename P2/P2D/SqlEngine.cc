@@ -200,7 +200,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     }else if(LargerEq != -1){
       index.locate(LargerEq, idxCursor);
     }else if(Larger != -1){
-      index.locate(Larger, idxCursor);
+      index.locate(Larger + 1, idxCursor);
     }else{  // search key smaller or there is only conditions on value attribute
       index.locate(0, idxCursor);
     }
