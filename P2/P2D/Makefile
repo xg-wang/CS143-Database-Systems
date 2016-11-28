@@ -13,3 +13,8 @@ SqlParser.tab.c: SqlParser.y
 clean:
 	rm -f bruinbase bruinbase.exe *.o *~ lex.sql.c SqlParser.tab.c SqlParser.tab.h
 	rm -rf *.dSYM 
+	rm -f xsmall.tbl xsmall.idx
+	rm -f small.tbl small.idx
+	rm -f medium.tbl medium.idx
+	rm -f large.tbl large.idx
+	rm -f xlarge.tbl xlarge.idx
