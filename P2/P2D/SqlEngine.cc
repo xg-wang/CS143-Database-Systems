@@ -118,7 +118,6 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   // if there exists any conditions on the key attribute, go for the index
   // else use the normal select
   if(!std::ifstream(table + ".idx") || !keyHasCond){
-    cout << "SELECT without INDEX!!!!" << endl;
     // scan the table file from the beginning
     rid.pid = rid.sid = 0;
     count = 0;
@@ -191,7 +190,6 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       return rc;
     }
     
-    cout << "SELECT with INDEX!!!!" << endl;
     //fprintf(stdout, "keyEq: %d, valueEq: %s\n", keyEq, valueEq.c_str());
     rid.pid = rid.sid = 0;
     count = 0;
@@ -202,17 +200,12 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     }else if(LargerEq != -1){
       index.locate(LargerEq, idxCursor);
     }else if(Larger != -1){
-      fprintf(stdout, "Larger: %d\n", Larger);
       index.locate(Larger, idxCursor);
-      fprintf(stdout, "pid: %d, eid: %d\n", idxCursor.pid, idxCursor.eid);
-      index.readForward(idxCursor, key, rid);
-      fprintf(stdout, "key: %d\n", key);
     }else{  // search key smaller or there is only conditions on value attribute
       index.locate(0, idxCursor);
     }
 
     while(index.readForward(idxCursor, key, rid) == 0){
-      //fprintf(stdout, "key: %d\n", key);
       if(!valueHasCond && attr == 4){ // no condition on value attribute and only need to count(*)
         if(keyEq != -1 && key != keyEq) goto end_select;
         if(Larger != -1 && key <= Larger) goto end_select;

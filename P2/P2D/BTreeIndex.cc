@@ -227,7 +227,7 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
     error = leaf.locate(searchKey, cursor.eid);
 
     cursor.pid = nextPid;
-    fprintf(stdout, "cursor.pid: %d, nextPid: %d\n", cursor.pid, nextPid);
+    //fprintf(stdout, "cursor.pid: %d, nextPid: %d\n", cursor.pid, nextPid);
     return error;
 }
 
@@ -261,6 +261,6 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
         cursor.eid = 0;
         cursor.pid = leaf.getNextNodePtr();
     }
-
+    if(cursor.pid == 0) return RC_END_OF_TREE;
     return 0;
 }
