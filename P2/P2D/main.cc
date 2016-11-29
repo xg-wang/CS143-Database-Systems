@@ -6,17 +6,16 @@
  * @author Junghoo "John" Cho <cho AT cs.ucla.edu>
  * @date 3/24/2008
  */
- 
+
 #include "Bruinbase.h"
 #include "SqlEngine.h"
 #include <cstdio>
 
-#include "test.h"
 
 int main()
 {
   // run the SQL engine taking user commands from standard input (console).
   SqlEngine::run(stdin);
-  
+
   return 0;
 }
