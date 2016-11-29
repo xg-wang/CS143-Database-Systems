@@ -195,6 +195,11 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
     rid.pid = rid.sid = 0;
     count = 0;
 
+    //if there is no conditions on both key and value with count(*)
+    if(!keyHasCond && !valueHasCond && attr == 4){
+      count = index.getCountAll();
+      goto end_select;
+    }
     //locate starting point
     if(keyEq != -1){
       index.locate(keyEq, idxCursor);

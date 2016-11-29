@@ -19,6 +19,7 @@ using namespace std;
  */
 BTreeIndex::BTreeIndex()
 {
+  countAll = 0;
   rootPid = -1;
   treeHeight = 0;
   pfOpen = false;
@@ -51,6 +52,7 @@ RC BTreeIndex::open(const string& indexname, char mode)
     }
     rootPid = *reinterpret_cast<int*>(buffer);
     treeHeight = *reinterpret_cast<int*>(buffer + sizeof(int));
+    countAll = *reinterpret_cast<int*>(buffer + 2*sizeof(int));
   } else {
     rootPid = -1;
     treeHeight = 0;
@@ -71,6 +73,7 @@ RC BTreeIndex::close()
     char buffer[PageFile::PAGE_SIZE];
     *reinterpret_cast<int*>(buffer) = rootPid;
     *reinterpret_cast<int*>(buffer + sizeof(int)) = treeHeight;
+    *reinterpret_cast<int*>(buffer + 2*sizeof(int)) = countAll;
     if ((rc = pf.write(0, buffer)) < 0) {
       fprintf(stderr, "Error: page file write leading data failed.\n");
       return rc;
@@ -82,6 +85,7 @@ RC BTreeIndex::close()
     return rc;
   }
   // cleanup
+  countAll = 0;
   rootPid = -1;
   treeHeight = 0;
   pfOpen = false;
@@ -105,6 +109,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     node.insert(key, rid);
     treeHeight = 1;
     rootPid = (pf.endPid() == 0 ? 1 : pf.endPid());
+    countAll++;
     return node.write(rootPid, pf); 
   }
 
@@ -183,6 +188,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
     return rc;
   }
 
+  countAll++;
   return 0;
 }
 
