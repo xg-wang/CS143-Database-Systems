@@ -44,6 +44,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
   IndexCursor idxCursor;
 
   RC     rc;
+  RC     error;
   int    key;     
   string value;
   int    count;
@@ -117,7 +118,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
   // if there exists any conditions on the key attribute, go for the index
   // else use the normal select
-  if(!std::ifstream(table + ".idx") || !keyHasCond){
+  if(!std::ifstream(table + ".idx") || (!keyHasCond && attr != 4)){
     // scan the table file from the beginning
     rid.pid = rid.sid = 0;
     count = 0;
@@ -205,7 +206,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       index.locate(0, idxCursor);
     }
 
-    while(index.readForward(idxCursor, key, rid) == 0){
+    while((error = index.readForward(idxCursor, key, rid)) == 0 || error == RC_END_OF_TREE){
       if(!valueHasCond && attr == 4){ // no condition on value attribute and only need to count(*)
         if(keyEq != -1 && key != keyEq) goto end_select;
         if(Larger != -1 && key <= Larger) goto end_select;
@@ -284,10 +285,12 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
       }
       while_continue:
       cout << "";
+      if(error == RC_END_OF_TREE) break;
     }
   }
   
   end_select:
+  //if(idxCursor.pid == 0)  count++;
   // print matching tuple count if "select count(*)"
   if (attr == 4) {
     fprintf(stdout, "%d\n", count);
