@@ -214,6 +214,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
         if(Smaller != -1 && key >= Smaller) goto end_select;
         if(SmallerEq != -1 && key > SmallerEq)  goto end_select;
         count++;
+        if (error == RC_END_OF_TREE) break;
         continue;
       }
 
