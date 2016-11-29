@@ -13,14 +13,10 @@
 #include "RecordFile.h"
 #include "PageFile.h"
 
-#include "test.h"
-
 /**
  * BTLeafNode: The class representing a B+tree leaf node.
  */
 class BTLeafNode {
-    // TODO: remove me after tests
-    friend class Tests;
   public:
     BTLeafNode();
    /**
@@ -121,7 +117,6 @@ class BTLeafNode {
  * BTNonLeafNode: The class representing a B+tree nonleaf node.
  */
 class BTNonLeafNode {
-  friend class Tests;
   public:
 
     /**

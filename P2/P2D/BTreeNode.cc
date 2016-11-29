@@ -384,7 +384,6 @@ RC BTNonLeafNode::locateChildPtr(int searchKey, PageId& pid)
  */
 RC BTNonLeafNode::initializeRoot(PageId pid1, int key, PageId pid2)
 { 
-	//std::fill(buffer, buffer + PageFile::PAGE_SIZE, 0);
 	memcpy(buffer, &pid1, sizeof(PageId));
 	RC error = insert(key, pid2); //insert (key, pid) pair
 	if(error != 0){
