@@ -233,7 +233,6 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
     error = leaf.locate(searchKey, cursor.eid);
 
     cursor.pid = nextPid;
-    //fprintf(stdout, "cursor.pid: %d, nextPid: %d\n", cursor.pid, nextPid);
     return error;
 }
 
